@@ -23,7 +23,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 30px;
+  padding: 40px 10px;
 }
 
 img {
@@ -69,7 +69,7 @@ header a:hover {
   text-decoration: underline;
 }
 
-header a:active {
+header a.active {
   color: #161616;
   text-decoration: underline;
 }
@@ -78,7 +78,7 @@ header a:active {
 
 .home--container {
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.46) 0%, rgba(0, 0, 0, 0.46) 100%), 
-    url("./assets/images/home-page.png"), lightgray 0px -65.191px / 100% 178.109% no-repeat;
+    url("./assets/images/home-page-hero.png"), lightgray 0px -65.191px / 100% 178.109% no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -164,6 +164,74 @@ header a:active {
   background-color: #161616;
   color: white;
   border-radius: 10px;
+}
+
+/* VANS */
+
+.vans--container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  gap: 35px;
+  padding: 60px 30px;
+}
+
+.vans--filter-header {
+  padding-left: 30px;
+}
+
+/* VAN */
+.van--link {
+  text-decoration: none;
+}
+
+.van--img {
+  max-width: 100%;
+  border-radius: 5px;
+  object-fit: contain;
+}
+
+.van--info {
+  display: flex;
+}
+
+.van--name {
+  color: #161616;
+  font-size: 1.2rem;
+  margin-right: auto;
+}
+
+.van--price {
+  color: #161616;
+  text-align: right;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.van--price > span {
+  color: #161616;
+  text-align: right;
+  font-family: Avenir Next;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.van--type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  width: 50%;
+  margin: 0;
+  padding-top: 0;
+
+  color: #FFEAD0;
+  font-family: Inter;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
 }
 
 

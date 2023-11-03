@@ -2,7 +2,7 @@
 This is my solution to the [VanLife project on Scrimba](https://scrimba.com/learn/reactrouter6)
 
 ## Overview
-An app for renting decked-out travel vans for your next road trip adventure
+A mobile web app for renting decked-out travel vans for your next road trip adventure
 
 ### Concepts
 Through this project, I will be able to reinforce my knowledge of React Router 6.
