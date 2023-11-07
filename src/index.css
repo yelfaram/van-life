@@ -77,16 +77,13 @@ header a.active {
 /* HOME */
 
 .home--container {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.46) 0%, rgba(0, 0, 0, 0.46) 100%), 
-    url("./assets/images/home-page-hero.png"), lightgray 0px -65.191px / 100% 178.109% no-repeat;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  background-image: url("./assets/images/van-road-trip.png");
+  background-repeat: no-repeat;
+  background-size: 100% auto;
   
   color: #fff;
   padding: 70px 30px;
-  min-height: 450px;
+  height: 100vh;
 
   display: flex;
   flex-direction: column;
@@ -130,6 +127,7 @@ header a.active {
 /* ABOUT */
 .about--img {
   max-width: 100%;
+  object-fit: cover;
 }
 
 .about--content {
@@ -177,6 +175,7 @@ header a.active {
 }
 
 .vans--filter-header {
+  margin-top: 55px;
   padding-left: 30px;
 }
 
@@ -188,7 +187,7 @@ header a.active {
 .van--img {
   max-width: 100%;
   border-radius: 5px;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .van--info {
@@ -234,5 +233,82 @@ header a.active {
   line-height: 32px;
 }
 
+/* VAN DETAIL */
+.van-detail--container {
+  padding: 30px;
+}
+
+.van-detail {
+  display: flex;
+  flex-direction: column;
+  color: #161616;
+}
+
+.van-detail img {
+  border-radius: 5px;
+  margin-block: 45px;
+  width: 100%;
+  object-fit: fill;
+}
+
+.van-detail h1 {
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.van-detail h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  width: 20%;
+
+  color: #FFEAD0;
+  font-family: Inter;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.van-detail--price {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.van-detail--price span {
+  font-family: Avenir Next;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.van-detail--description {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 24px;
+  margin-bottom: 20px;
+}
+
+.van-detail--rent {
+  border: none;
+  border-radius: 5px;
+  background-color: #FF8C38;
+  padding: 10px;
+  margin-bottom: 80px;
+  cursor: pointer;
+  transition: transform .1s ease-in-out;
+
+  color: #FFF;
+  font-family: Inter;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.van-detail--rent:hover {
+  transform: translate(1px, 1px);
+}
 
 

@@ -23,7 +23,7 @@ function Van(props) {
                 <div className="van--info">
                     <h3 className="van--name">{props.name}</h3>
                     <p className="van--price">
-                        {props.price}<span>/day</span>
+                        ${props.price}<span>/day</span>
                     </p>
                 </div>
                 <h3 className="van--type" style={styles}>{props.type}</h3>
