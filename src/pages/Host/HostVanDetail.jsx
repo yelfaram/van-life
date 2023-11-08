@@ -1,5 +1,6 @@
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, Outlet } from "react-router-dom"
 import { useState, useEffect } from "react"
+import HostVanDetailNavbar from "../../components/Host/HostVanDetailNavbar"
 
 function HostVanDetail() {
     const { id } = useParams()
@@ -48,6 +49,9 @@ function HostVanDetail() {
                         </p>
                     </div>
                 </div>
+                <HostVanDetailNavbar />
+
+                <Outlet context={[hostVan, setHostVan]}/>
             </div>
         </section>
     )
