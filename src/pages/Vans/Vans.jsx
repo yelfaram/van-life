@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import Van from "../components/Van"
+import Van from "../../components/Vans/Van"
 
 function Vans() {
     const [allVans, setAllVans] = useState([])
@@ -9,6 +9,10 @@ function Vans() {
             .then(res => res.json())
             .then(data => setAllVans(data.vans))
     },[])
+
+    if (!allVans.length > 0) {
+        return <div className="loading"><h2>Loading...</h2></div>
+    }
 
     const vanElements = allVans.map(van => {
         return <Van key={van.id} {...van} />
