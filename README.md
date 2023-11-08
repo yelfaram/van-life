@@ -2,10 +2,18 @@
 This is my solution to the [VanLife project on Scrimba](https://scrimba.com/learn/reactrouter6)
 
 ## Overview
-A mobile web app for renting decked-out travel vans for your next road trip adventure
+An app for renting decked-out travel vans for your next road trip adventure
 
 ### Concepts
 Through this project, I will be able to reinforce my knowledge of React Router 6.
+
+Some of the concepts I've learned about include:
+- BrowserRouter
+- Link/NavLink
+- Route
+    - params, nesting, index
+- Outlet
+    - context
 
 ## React + Vite
 This project was created with [Vite](https://vitejs.dev/guide/)
