@@ -17,7 +17,7 @@ function Van(props) {
 
     return (
         <div className="van--container">
-            <Link to={`/vans/${props.id}`} className="van--link">
+            <Link to={props.id} state={{ searchParams: props.searchParams, typeFilter: props.typeFilter}} className="van--link">
                 <img className="van--img" src={props.imageUrl} />
 
                 <div className="van--info">
@@ -38,6 +38,8 @@ Van.propTypes = {
     price: PropTypes.number,
     imageUrl: PropTypes.string,
     type: PropTypes.string,
+    searchParams: PropTypes.string,
+    typeFilter: PropTypes.string,
 }
 
 export default Van

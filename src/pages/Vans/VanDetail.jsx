@@ -1,9 +1,10 @@
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
 
 function VanDetail() {
     const { id } = useParams()
     const [van, setVan] = useState(null)
+    const { state } = useLocation()
     
     useEffect(() => {
         fetch(`/api/vans/${id}`)
@@ -28,13 +29,18 @@ function VanDetail() {
             break;
     }
 
+    // similar to saying "state && state.searchParams" (kind of like conditional rendering)
+    // if state exists we take value of state.searchParams if not just empty string
+    const searchParams = state?.searchParams || ""
+    const type = state?.typeFilter || "all"
+
     return (
         <section>
             <Link
-                to=".."
+                to={`..${searchParams}`}
                 relative="path"
                 className="back-button"
-            >&larr; <span>Back to all vans</span>
+            >&larr; <span>Back to {type} vans</span>
             </Link>
             <div className="van-detail--container">
                 <div className="van-detail">

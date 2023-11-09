@@ -50,7 +50,7 @@ img {
 
 .back-button {
   display: block;
-  color: black;
+  color: #161616;
   text-decoration: none;
   margin-top: 60px;
   margin-left: 30px;
@@ -218,10 +218,65 @@ footer {
   padding: 60px 30px;
 }
 
-.vans--filter-header {
+.vans--header {
   margin-top: 55px;
   padding-left: 30px;
 }
+
+.vans--filter {
+  margin-left: 30px;
+  margin-top: 30px;
+}
+
+.vans--filter-type {
+  margin-right: 20px;
+  border-radius: 5px;
+  background-color: #FFEAD0;
+  height: 37px;
+  padding: 7px 26px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  text-decoration: none;
+  color: #4D4D4D;
+  text-align: center;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  transition: 200ms all cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vans--filter-type:hover, .vans--filter-type.selected {
+  color: #FFEAD0;
+}
+.vans--filter-type.simple:hover, .vans--filter-type.simple.selected {
+  background-color: #E17654;
+}
+.vans--filter-type.luxury:hover, .vans--filter-type.luxury.selected {
+  background-color: #161616;
+}
+.vans--filter-type.rugged:hover, .vans--filter-type.rugged.selected {
+  background-color: #115E59;
+}
+
+.vans--filter-clear {
+  margin-left: 20px;
+  height: 34px;
+  border: none;
+  border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
+
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #4D4D4D;
+  text-align: center;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+}
+
 
 /* VAN */
 .van--link {
@@ -516,7 +571,7 @@ footer {
 
 /* HOST VAN DETAIL PHOTOS */
 .host-van-photos {
-  height: 180px;
-  width: 180px;
+  height: 125px;
+  width: 125px;
   border-radius: 5px;
 }

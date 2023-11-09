@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 function HostVan(props) {
     return (
         <div className="host-van--container">
-            <Link to={`/host/vans/${props.id}`} className="host-van--link">
+            <Link to={props.id} className="host-van--link">
                 <img className="host-van--img" src={props.imageUrl} />
 
 
