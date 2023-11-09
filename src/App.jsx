@@ -1,5 +1,6 @@
 import About from "./pages/About"
 import Home from "./pages/Home"
+import NotFound from "./pages/NotFound"
 import Vans from "./pages/Vans/Vans"
 import VanDetail from "./pages/Vans/VanDetail"
 import Dashboard from "./pages/Host/Dashboard"
@@ -25,6 +26,7 @@ function App() {
                     <Route path="about" element={<About />} />
                     <Route path="vans" element={<Vans />} />
                     <Route path="vans/:id" element={<VanDetail />} />
+                    
                     <Route path="host" element={<HostLayout />}>
                         <Route index element={<Dashboard />} />
                         <Route path="income" element={<Income />} />
@@ -37,6 +39,8 @@ function App() {
                             <Route path="photos" element={<HostVanPhotos /> } />
                         </Route>
                     </Route>
+
+                    <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
         </BrowserRouter>
