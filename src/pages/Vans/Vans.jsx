@@ -1,23 +1,13 @@
-import { useState, useEffect } from "react"
-import { useSearchParams } from "react-router-dom";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 import Van from "../../components/Vans/Van"
 
 function Vans() {
-    const [allVans, setAllVans] = useState([])
     // for filtering
     const [searchParams, setSearchParams] = useSearchParams()
-
     const typeFilter = searchParams.get("type")
 
-    useEffect(() => {
-        fetch("/api/vans")
-            .then(res => res.json())
-            .then(data => setAllVans(data.vans))
-    },[])
-
-    if (!allVans.length > 0) {
-        return <div className="loading"><h2>Loading...</h2></div>
-    }
+    // loader data
+    const allVans = useLoaderData()
 
     function handleFilterChange(key, value) {
         setSearchParams(prevParams => {

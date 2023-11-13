@@ -1,16 +1,9 @@
-import { useParams, Link, useLocation } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { Link, useLocation, useLoaderData } from "react-router-dom"
 
 function VanDetail() {
-    const { id } = useParams()
-    const [van, setVan] = useState(null)
     const { state } = useLocation()
     
-    useEffect(() => {
-        fetch(`/api/vans/${id}`)
-            .then(res => res.json())
-            .then(data => setVan(data.vans))
-    }, [id])
+    const van = useLoaderData()
 
     if (!van) {
         return <div className="loading"><h2>Loading...</h2></div>
