@@ -1,18 +1,9 @@
-import { useState, useEffect } from "react"
 import HostVan from "../../components/Host/HostVan"
+import { useLoaderData } from "react-router-dom"
 
 function HostVans() {
-    const [allHostVans, setAllHostVans] = useState([])
-
-    useEffect(() => {
-        fetch("/api/host/vans")
-            .then(res => res.json())
-            .then(data => setAllHostVans(data.vans))
-    },[])
-
-    if (!allHostVans.length > 0) {
-        return <div className="loading"><h2>Loading...</h2></div>
-    }
+    // loader data
+    const allHostVans = useLoaderData()
 
     const hostVanElements = allHostVans.map(hostVan => {
         return <HostVan key={hostVan.id} {...hostVan} />

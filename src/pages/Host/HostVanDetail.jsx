@@ -1,20 +1,9 @@
-import { useParams, Link, Outlet } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { Link, Outlet, useLoaderData } from "react-router-dom"
 import HostVanDetailNavbar from "../../components/Host/HostVanDetailNavbar"
 
 function HostVanDetail() {
-    const { id } = useParams()
-    const [hostVan, setHostVan] = useState(null)
-
-    useEffect(() => {
-        fetch(`/api/host/vans/${id}`)
-            .then(res => res.json())
-            .then(data => setHostVan(data.vans))
-    }, [id])
-
-    if (!hostVan) {
-        return <div className="loading"><h2>Loading...</h2></div>
-    }
+    // loader data
+    const hostVan = useLoaderData()
 
     let styles
     switch (hostVan.type) {
@@ -51,7 +40,7 @@ function HostVanDetail() {
                 </div>
                 <HostVanDetailNavbar />
 
-                <Outlet context={[hostVan, setHostVan]}/>
+                <Outlet context={[hostVan]}/>
             </div>
         </section>
     )

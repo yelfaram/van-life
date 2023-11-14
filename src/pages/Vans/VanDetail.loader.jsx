@@ -1,5 +1,5 @@
 import { getVanById } from "../../../api"
 
-export function loader(id) {
-    return getVanById(id)
+export function loader({ params }) {
+    return getVanById(params.id)
 }

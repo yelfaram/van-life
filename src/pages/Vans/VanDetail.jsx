@@ -3,11 +3,8 @@ import { Link, useLocation, useLoaderData } from "react-router-dom"
 function VanDetail() {
     const { state } = useLocation()
     
+    // loader data
     const van = useLoaderData()
-
-    if (!van) {
-        return <div className="loading"><h2>Loading...</h2></div>
-    }
 
     let styles
     switch (van.type) {
