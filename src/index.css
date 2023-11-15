@@ -270,7 +270,7 @@ footer {
   margin-top: 50px;
 }
 
-.login--protected {
+.red {
   color: #cc0000;
   margin: 0;
 }
@@ -317,6 +317,11 @@ footer {
 
 .login--form > button:hover {
   transform: translate(1px, 1px);
+}
+
+.login--form > button:disabled {
+  background-color: #aaaaaa;
+  cursor: not-allowed;
 }
 
 /* VANS */
