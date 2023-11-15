@@ -1,50 +1,37 @@
-import { useState } from "react"
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData, Form, useActionData, useNavigation } from "react-router-dom"
 
 function Login() {
-    const [loginFormData, setLoginFormData] = useState({ email: "", password: "" })
-
+    const error = useActionData();
     // loader message for protected routes
     const message = useLoaderData()
-    
-    function handleChange(event) {
-        // destructure the name and value of whatever event we capture
-        const { name, value } = event.target
-        setLoginFormData(prevLoginFormData => {
-            return {
-                ...prevLoginFormData,
-                [name]: value
-            }
-        })
-    }
-
-    function handleFormSubmit(event) {
-        // stop page from refreshing and add form data as query string in url
-        event.preventDefault()
-        console.log(loginFormData)
-    }
+    // for navigation state
+    const navigation = useNavigation();
 
     return (
         <div className="login--container">
             <h1>Sign in to your account</h1>
-            { message && <h4 className="login--protected">{ message }</h4>}
-            <form onSubmit={handleFormSubmit} className="login--form">
+            { message && <h4 className="red">{ message }</h4>}
+            <br />
+            { error && <h4 className="red">{ error.message }</h4>}
+            <Form 
+                method="post" 
+                className="login--form"
+                replace
+            >
                 <input 
                     type="email"
                     name="email"
                     placeholder="Email address"
-                    onChange={handleChange}
-                    value={loginFormData.email}
                 />
                 <input 
                     type="password"
                     name="password"
                     placeholder="Password"
-                    onChange={handleChange}
-                    value={loginFormData.password}
                 />
-                <button>Sign in</button>
-            </form>
+                <button disabled={navigation.state === "submitting"}>
+                    {navigation.state === "submitting" ? "Signing in ..." : "Sign in"}
+                </button>
+            </Form>
         </div> 
     )   
 }
