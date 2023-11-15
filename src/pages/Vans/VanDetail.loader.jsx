@@ -1,5 +1,7 @@
+import { defer } from "react-router-dom"
 import { getVanById } from "../../../api"
 
 export function loader({ params }) {
-    return getVanById(params.id)
+    const vanPromise = getVanById(params.id)
+    return defer({ van: vanPromise })
 }
