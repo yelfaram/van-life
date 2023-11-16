@@ -9,7 +9,7 @@ function HostVans() {
 
     function renderHostVansElements(allHostVans) {
         const hostVanElements = allHostVans.map(hostVan => {
-            return <HostVan key={hostVan.id} {...hostVan} />
+            return <HostVan key={hostVan.id} {...hostVan} isDashboard={false}/>
         })
 
         return (

@@ -536,10 +536,9 @@ footer {
   display: grid;
   grid-template-rows: auto;
   justify-items: center;
-  row-gap: 15px;
   padding: 30px;
 
-  margin-bottom: 70px;
+  margin-bottom: 55px;
 }
 
 /* HOST VAN */
@@ -554,6 +553,7 @@ footer {
   border-radius: 6px;
   background-color: #FFF;
   padding: 20px;
+  margin-bottom: 15px;
   width: 100%;
 }
 
@@ -689,4 +689,97 @@ footer {
   height: 125px;
   width: 125px;
   border-radius: 5px;
+}
+
+/* HOST VAN DASHBOARD */
+.dashboard--income {
+  margin-top: 20px;
+  background-color: #FFEAD0;
+  border-radius: 5px;
+  padding: 35px 30px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard--income > div {
+  margin-right: auto;
+}
+
+.dashboard--income > div > h2 {
+  font-size: 2.25rem;
+  margin: 0;
+}
+
+.dashboard--income > div > p {
+  color: #4D4D4D;
+  font-size: 1rem;
+}
+
+.dashboard--income > div > p > span {
+  font-weight: 700;
+  text-decoration-line: underline;
+}
+
+.dashboard--income > div > h1 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.dashboard--income > a, .dashboard--reviews > a, .dashboard--vans > div > a {
+  text-decoration: none;
+  color: #161616;
+  font-size: 1rem;
+}
+
+.dashboard--income > a:hover, .dashboard--reviews > a:hover, .dashboard--vans > div > a:hover {
+  text-decoration: underline;
+}
+
+.dashboard--reviews {
+  background-color: #FFDDB2;
+  border-radius: 5px;
+  padding: 40px 30px;
+
+  display: flex;
+  align-items: center;
+}
+
+.dashboard--reviews > h2 {
+  margin-right: 15px;
+  font-size: 1.5rem;
+}
+
+.dashboard--reviews .star {
+  color: #ff8c38;
+  font-size: 1.5625rem;
+}
+
+.dashboard--reviews > p {
+  margin-left: 5px;
+  margin-right: auto;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.dashboard--reviews > p > span {
+  font-weight: 500;
+}
+
+.dashboard--vans > div {
+  margin-top: 20px;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+}
+
+.dashboard--vans > div > h2 {
+  margin-right: auto;
+}
+
+.dashboard--vans--container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 60px;
 }

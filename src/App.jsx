@@ -58,7 +58,7 @@ const router = createBrowserRouter(
                 <Route 
                     index 
                     element={<Dashboard />} 
-                    loader={async ({ request }) => await requireAuth(request)}
+                    loader={hostVansLoader}
                 />
                 <Route 
                     path="income" 

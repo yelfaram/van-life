@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 function HostVan(props) {
     return (
         <div className="host-van--container">
-            <Link to={props.id} className="host-van--link">
+            <Link to={props.isDashboard ? `vans/${props.id}` : props.id} className="host-van--link">
                 <img className="host-van--img" src={props.imageUrl} />
 
 
@@ -24,6 +24,7 @@ HostVan.propTypes = {
     name: PropTypes.string,
     price: PropTypes.number,
     imageUrl: PropTypes.string,
+    isDashboard: PropTypes.bool,
 }
 
 export default HostVan
