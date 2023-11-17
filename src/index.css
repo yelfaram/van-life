@@ -528,8 +528,7 @@ footer {
 
 /* HOST VANS */
 .host-vans--header {
-  margin-top: 55px;
-  padding-left: 30px;
+  padding: 10px 30px;
 }
 
 .host-vans--container {
@@ -782,4 +781,75 @@ footer {
   display: flex;
   flex-direction: column;
   margin-bottom: 60px;
+}
+
+/* TRANSACTION */
+.transaction--container {
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  border-radius: 6px;
+  background-color: #FFF;
+  margin-bottom: 30px;
+}
+
+.transaction--container > h2 {
+  margin-right: auto;
+  font-weight: 600;
+  font-size: 2.25rem;
+}
+
+.transaction--container > p {
+  color: #4D4D4D;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+/* HOST VAN INCOME */
+.income {
+  padding: 10px 30px;
+}
+
+.income > h2 {
+  margin: 0;
+  margin-bottom: 25px;
+  font-size: 2.25rem;
+}
+
+.income > p, .transactions--container > div > p {
+  color: #4D4D4D;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.income > p > span, .transactions--container > div > p > span {
+  font-weight: 700;
+  text-decoration-line: underline;
+}
+
+.income > h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0;
+  margin-bottom: 40px;
+}
+
+/* .transactions--container {
+  margin-bottom: 80px;
+} */
+
+.transactions--container > div {
+  display: flex;
+  align-items: center;
+}
+
+.transactions--container > div > h3 {
+  margin-right: auto;
+}
+
+.transactions--container > div > p {
+  color: #4D4D4D;
+  font-weight: 500;
+  font-size: 1rem;
 }

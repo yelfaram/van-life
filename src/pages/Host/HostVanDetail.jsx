@@ -28,7 +28,7 @@ function HostVanDetail() {
                     relative="path"
                     className="back-button"
                 >
-                    &larr; <span>Back to all vans</span>
+                    &larr; <span>Back to your vans</span>
                 </Link>
                 <div className="host-van-detail--container">
                     <div className="host-van-detail">
