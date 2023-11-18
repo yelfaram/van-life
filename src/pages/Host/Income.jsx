@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import Transaction from "../../components/Transaction"
+import Transaction from "../../components/Host/Transaction"
 import {
     Chart as ChartJS,
     CategoryScale,

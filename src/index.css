@@ -528,6 +528,7 @@ footer {
 
 /* HOST VANS */
 .host-vans--header {
+  margin: 0;
   padding: 10px 30px;
 }
 
@@ -690,7 +691,7 @@ footer {
   border-radius: 5px;
 }
 
-/* HOST VAN DASHBOARD */
+/* HOST DASHBOARD */
 .dashboard--income {
   margin-top: 20px;
   background-color: #FFEAD0;
@@ -805,7 +806,7 @@ footer {
   font-size: 1.25rem;
 }
 
-/* HOST VAN INCOME */
+/* HOST INCOME */
 .income {
   padding: 10px 30px;
 }
@@ -852,4 +853,134 @@ footer {
   color: #4D4D4D;
   font-weight: 500;
   font-size: 1rem;
+}
+
+/* REVIEW */
+.review--container .review--star {
+  color: #ff8c38;
+  margin-right: 5px;
+}
+
+.review--info {
+  display: flex;
+  align-items: center;
+}
+
+.review--name {
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.review--date {
+  color: #8C8C8C;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.review--container > p {
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 25px;
+  margin: 0;
+}
+
+.review--container hr {
+  background-color: #c7c7c7;
+  height: 1px;
+  border: 0;
+  margin: 25px 0;
+}
+
+/* RATING PROGRESS */
+.rating--container {
+  display: flex;
+  align-items: center;
+}
+
+.rating--progress {
+  background-color: #B9B9B9;
+  height: 8px;
+  border-radius: 4px;
+  width: 100%;
+  margin: 0 10px;
+}
+
+.rating--bar {
+  height: 8px;
+  border-radius: 4px;
+  background-color: #FF8C38;
+}
+
+.rating--percentage, .rating--container > p {
+  color: #4D4D4D;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 100px;
+}
+
+.rating--percentage {
+  text-align: right;
+}
+
+/* HOST REVIEWS */
+.reviews {
+  padding: 10px 30px;
+}
+
+.reviews--header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.reviews--header > h2 {
+  font-weight: 700;
+  font-size: 2rem;
+  margin: 0;
+  margin-right: 20px;
+}
+
+.reviews--header > p {
+  color: #4D4D4D;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.reviews--header > p > span {
+  font-weight: 700;
+  text-decoration-line: underline;
+}
+
+.reviews--progress-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.reviews--progress-header > h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  margin-right: 10px;
+}
+
+.overall-rating {
+  color: #ff8c38;
+  margin-right: 8px;
+  font-size: 1.5rem;
+}
+
+.reviews--progress-header > p {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.reviews--container > div > h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-top: 25px;
 }
