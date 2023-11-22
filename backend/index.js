@@ -1,9 +1,11 @@
 import express from "express";
 import cors from "cors";
 import 'dotenv/config';
+import connection from "./db/connection.js";
 
 // create an express application
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // using JSON file from any client to Express
 app.use(express.json());
@@ -15,6 +17,15 @@ app.get('/', (req, res) => {
 })
 
 // app listens to 3000 port
-app.listen(process.env.PORT, () => {
-    console.log(`App running on port ${process.env.PORT}.`);
+app.listen(PORT, () => {
+    console.log(`App running on port ${PORT}.`);
+});
+
+//test connection
+connection.connect(err => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  console.log('Connected to the database');
 });
