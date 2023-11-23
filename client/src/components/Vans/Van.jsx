@@ -17,8 +17,8 @@ function Van(props) {
 
     return (
         <div className="van--container">
-            <Link to={props.id} state={{ searchParams: props.searchParams, typeFilter: props.typeFilter}} className="van--link">
-                <img className="van--img" src={props.imageUrl} />
+            <Link to={props.van_id.toString()} state={{ searchParams: props.searchParams, typeFilter: props.typeFilter}} className="van--link">
+                <img className="van--img" src={props.image_url} />
 
                 <div className="van--info">
                     <h3 className="van--name">{props.name}</h3>
@@ -33,10 +33,10 @@ function Van(props) {
 }
 
 Van.propTypes = {
-    id: PropTypes.string,
+    van_id: PropTypes.number,
     name: PropTypes.string,
     price: PropTypes.number,
-    imageUrl: PropTypes.string,
+    image_url: PropTypes.string,
     type: PropTypes.string,
     searchParams: PropTypes.string,
     typeFilter: PropTypes.string,

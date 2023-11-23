@@ -21,7 +21,7 @@ function Vans() {
     function renderVansElements(allVans) {
         const filteredVans = typeFilter ? allVans.filter(van => van.type === typeFilter) : allVans
         const vanElements = filteredVans.map(van => {
-            return <Van key={van.id} {...van} searchParams={`?${searchParams.toString()}`} typeFilter={typeFilter}/>
+            return <Van key={van.van_id} {...van} searchParams={`?${searchParams.toString()}`} typeFilter={typeFilter}/>
         })
         return (
             <>

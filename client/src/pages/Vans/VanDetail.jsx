@@ -37,7 +37,7 @@ function VanDetail() {
                 </Link>
                 <div className="van-detail--container">
                     <div className="van-detail">
-                        <img src={van.imageUrl} />
+                        <img src={van.image_url} />
                         <h2 style={styles}>{van.type}</h2>
                         <h1>{van.name}</h1>
                         <p className="van-detail--price">

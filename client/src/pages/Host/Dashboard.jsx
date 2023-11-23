@@ -10,7 +10,7 @@ function Dashboard() {
 
     function renderHostVansElements(allHostVans) {
         const hostVanElements = allHostVans.map(hostVan => {
-            return <HostVan key={hostVan.id} {...hostVan} isDashboard={true}/>
+            return <HostVan key={hostVan.van_id} {...hostVan} isDashboard={true}/>
         })
 
         return (

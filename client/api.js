@@ -1,5 +1,5 @@
 export async function getVans() {
-    const res = await fetch("/api/vans")
+    const res = await fetch("http://localhost:3000/vans", { credentials: "include" })
     if (!res.ok) {
         const error = {
             message: "Failed to fetch vans",
@@ -14,7 +14,7 @@ export async function getVans() {
 }
 
 export async function getVanById(id) {
-    const res = await fetch(`/api/vans/${id}`)
+    const res = await fetch(`http://localhost:3000/vans/${id}`, { credentials: "include" })
     if (!res.ok) {
         const error = {
             message: `Failed to fetch van by id: ${id}`,
@@ -25,11 +25,11 @@ export async function getVanById(id) {
         throw error
     }
     const data = await res.json()
-    return data.vans
+    return data.van
 }
 
 export async function getHostVans() {
-    const res = await fetch("/api/host/vans")
+    const res = await fetch("http://localhost:3000/host/vans", { credentials: "include" })
     if (!res.ok) {
         const error = {
             message: "Failed to fetch host vans",
@@ -40,11 +40,11 @@ export async function getHostVans() {
         throw error
     }
     const data = await res.json()
-    return data.vans
+    return data.hostVans
 }
 
 export async function getHostVanById(id) {
-    const res = await fetch(`/api/host/vans/${id}`)
+    const res = await fetch(`http://localhost:3000/host/vans/${id}`, { credentials: "include" })
     if (!res.ok) {
         const error = {
             message: `Failed to fetch host van by id: ${id}`,
@@ -55,15 +55,21 @@ export async function getHostVanById(id) {
         throw error
     }
     const data = await res.json()
-    return data.vans
+    return data.hostVan
 }
 
 export async function loginUser(creds) {
-    const res = await fetch("/api/login",
-        { method: "post", body: JSON.stringify(creds) }
+    const res = await fetch("http://localhost:3000/login", 
+        { 
+            method: "post", 
+            body: JSON.stringify(creds),
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        }
     )
-    const data = await res.json()
-
+    const data = await res.json();
     if (!res.ok) {
         throw {
             message: data.message,
@@ -71,6 +77,15 @@ export async function loginUser(creds) {
             status: res.status
         }
     }
+    return data
+}
 
+export async function logoutUser() {
+    const res = await fetch("http://localhost:3000/logout", { credentials: "include" })
+    const data = await res.json();
+    console.log("LogoutUser was called", data)
+    if (!res.ok) {
+        throw new Error(`Logout failed: ${data.message}`);
+    }
     return data
 }

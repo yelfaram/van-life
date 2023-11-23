@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 function HostVan(props) {
     return (
         <div className="host-van--container">
-            <Link to={props.isDashboard ? `vans/${props.id}` : props.id} className="host-van--link">
-                <img className="host-van--img" src={props.imageUrl} />
+            <Link to={props.isDashboard ? `vans/${props.van_id.toString()}` : props.van_id.toString()} className="host-van--link">
+                <img className="host-van--img" src={props.image_url} />
 
 
                 <div className="host-van--info">
@@ -20,10 +20,10 @@ function HostVan(props) {
 }
 
 HostVan.propTypes = {
-    id: PropTypes.string,
+    van_id: PropTypes.number,
     name: PropTypes.string,
     price: PropTypes.number,
-    imageUrl: PropTypes.string,
+    image_url: PropTypes.string,
     isDashboard: PropTypes.bool,
 }
 

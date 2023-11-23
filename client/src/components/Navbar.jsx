@@ -1,7 +1,10 @@
-import { NavLink } from "react-router-dom";
-import Logo from "../assets/images/logo.png";
+import { NavLink } from "react-router-dom"
+import Logo from "../assets/images/logo.png"
+import { useAuth } from "../../AuthContext"
 
 function Navbar() {
+    const { loggedIn } = useAuth()
+
     const activeStyles = {
         textDecoration: "underline",
         textUnderlineOffset: "4px",
@@ -33,10 +36,10 @@ function Navbar() {
                     About
                 </NavLink>
                 <NavLink 
-                    to="login"
+                    to={loggedIn ? "logout" : "login"}
                     style={( {isActive} ) => isActive ? activeStyles : null}
                 >
-                    Login
+                    {loggedIn ? "Logout" : "Login"}
                 </NavLink>
             </nav>
         </header>

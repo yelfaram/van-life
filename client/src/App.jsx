@@ -2,8 +2,8 @@ import About from "./pages/About"
 import Home from "./pages/Home"
 import NotFound from "./pages/NotFound"
 import Login from "./pages/Login"
-import { action as loginAction } from "./pages/Login.action"
 import { loader as loginLoader } from "./pages/Login.loader"
+import Logout from "./pages/Logout"
 import Vans from "./pages/Vans/Vans"
 import { loader as vansLoader } from "./pages/Vans/Vans.loader"
 import VanDetail from "./pages/Vans/VanDetail"
@@ -27,8 +27,9 @@ import {
     createRoutesFromElements,  
     Route 
 } from "react-router-dom"
-import "../server"
+// import "../server"
 import { requireAuth } from "../utils"
+import { AuthProvider } from "../AuthContext"
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -51,7 +52,11 @@ const router = createBrowserRouter(
                 path="login" 
                 element={<Login />} 
                 loader={loginLoader}
-                action={loginAction}
+            />
+
+            <Route 
+                path="logout"
+                element={<Logout />} 
             />
             
             <Route path="host" element={<HostLayout />}>
@@ -107,10 +112,12 @@ const router = createBrowserRouter(
 
 function App() {
     return (
-        <RouterProvider 
-            router={router}
-            fallbackElement={<div className="loading"><h2>Loading...</h2></div>}
-        />
+        <AuthProvider>
+            <RouterProvider 
+                router={router}
+                fallbackElement={<div className="loading"><h2>Loading...</h2></div>}
+            />
+        </AuthProvider>
     )
 }
 

@@ -32,7 +32,7 @@ function HostVanDetail() {
                 </Link>
                 <div className="host-van-detail--container">
                     <div className="host-van-detail">
-                        <img src={hostVan.imageUrl} />
+                        <img src={hostVan.image_url} />
 
                         <div className="host-van-detail--info">
                             <h2 style={styles}>{hostVan.type}</h2>
