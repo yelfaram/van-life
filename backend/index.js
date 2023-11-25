@@ -31,14 +31,16 @@ app.get('/', (req, res) => {
   res.status(200).send('Hello World!');
 })
 
-// ROUTES - LOGIN/LOGOUT
+// ROUTES - LOGIN/LOGOUT/REGISTER
 app.post('/login', async (req, res) => {
   const {email, password} = req.body;
 
   try {
-    const hostId = await vanLife.authenticateUser(email, password);
-    if (hostId) {
-      req.session.hostId = hostId,
+    const result = await vanLife.authenticateUser(email, password);
+    const user = result.owner;
+
+    if (user && user.owner_id) {
+      req.session.hostId = user.owner_id,
       res.json({ success: true, message: 'Login successful'})
     } else {
       res.status(401).json({ success: false, message: 'Invalid credentials' });
@@ -54,10 +56,31 @@ app.get('/logout', async (req, res) => {
   res.json({ success: true, message: 'Logout successful' });
 })
 
+app.post('/register', async (req, res) => {
+  const { firstName, lastName, email, password } = req.body;
+
+  try {
+    const result = await vanLife.authenticateUser(email, password);
+    const user = result.owner;
+
+    if (user) {
+      res.status(409).json({ success: false, message: 'User already exists with that email'})
+    } else {
+      const msg = await vanLife.insertOwner(email, password, firstName, lastName)
+      res.json({ success: true, message: msg })
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+})
+
 // ROUTES - VANS
 app.get('/vans', async (req, res) => {
   try {
-    const vans = await vanLife.getVans()
+    const result = await vanLife.getVans()
+    const vans = result.vans
+    
     res.json({ vans })
   } catch (err) {
     console.error(err)
@@ -67,8 +90,11 @@ app.get('/vans', async (req, res) => {
 
 app.get('/vans/:id', async (req, res) => {
   const vanId = req.params.id
+
   try {
-    const van = await vanLife.getVanById(vanId)
+    const result = await vanLife.getVanById(vanId)
+    const van = result.van
+
     res.json({ van })
   } catch (err) {
     console.error(err)
@@ -78,8 +104,11 @@ app.get('/vans/:id', async (req, res) => {
 
 app.get('/host/vans', async (req, res) => {
   const hostId = req.session.hostId
+
   try {
-    const hostVans = await vanLife.getHostVans(hostId)
+    const result = await vanLife.getHostVans(hostId)
+    const hostVans = result.hostVans
+    
     res.json({ hostVans })
   } catch (err) {
     console.error(err)
@@ -90,8 +119,11 @@ app.get('/host/vans', async (req, res) => {
 app.get('/host/vans/:id', async (req, res) => {
   const hostId = req.session.hostId
   const vanId = req.params.id
+
   try {
-    const hostVan = await vanLife.getHostVanById(hostId, vanId)
+    const result = await vanLife.getHostVanById(hostId, vanId)
+    const hostVan = result.hostVan
+
     res.json({ hostVan })
   } catch (err) {
     console.error(err)

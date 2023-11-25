@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-    const [loggedIn, setLoggedIn] =  useState(localStorage.getItem("loggedIn"))
+    const [loggedIn, setLoggedIn] =  useState(localStorage.getItem("loggedIn") || false)
     
     const login = () => {
         setLoggedIn(true)

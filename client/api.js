@@ -58,10 +58,31 @@ export async function getHostVanById(id) {
     return data.hostVan
 }
 
+export async function registerUser(creds) {
+    const res = await fetch("http://localhost:3000/register",
+    {
+        method: "POST",
+        body: JSON.stringify(creds),
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    })
+    const data = await res.json();
+    if (!res.ok) {
+        throw {
+            message: data.message,
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+    return data
+}
+
 export async function loginUser(creds) {
     const res = await fetch("http://localhost:3000/login", 
         { 
-            method: "post", 
+            method: "POST", 
             body: JSON.stringify(creds),
             headers: {
                 "Content-Type": "application/json",

@@ -11,9 +11,9 @@ export const authenticateUser = async (email, password) => {
                         reject(error);
                     }
                     if (results && results.rows.length > 0) {
-                        resolve(results.rows[0].owner_id);
+                        resolve({ owner: results.rows[0]});
                     } else {
-                        reject(new Error("No owner found"));
+                        resolve({ owner: null });
                     }
                 }
             );
@@ -32,9 +32,9 @@ export const getVans = async () => {
                     reject(error);
                 }
                 if (results && results.rows.length > 0) {
-                    resolve(results.rows);
+                    resolve({ vans: results.rows });
                 } else {
-                    reject(new Error("No vans found"));
+                    resolve({ vans: null })
                 }
             });
         });
@@ -55,9 +55,9 @@ export const getVanById = async (vanId) => {
                         reject(error);
                     }
                     if (results && results.rows.length > 0) {
-                        resolve(results.rows[0]);
+                        resolve({ van: results.rows[0] });
                     } else {
-                        reject(new Error(`No van with id:${vanId} found`));
+                        resolve({ van: null });
                     }
                 }
             );
@@ -79,9 +79,9 @@ export const getHostVans = async (hostId) => {
                         reject(error);
                     }
                     if (results && results.rows.length > 0) {
-                        resolve(results.rows);
+                        resolve({ hostVans: results.rows });
                     } else {
-                        reject(new Error(`No vans with owner_id:${hostId} found`));
+                        resolve({ hostVans: null })
                     }
                 }
             )
@@ -103,9 +103,33 @@ export const getHostVanById = async (hostId, vanId) => {
                         reject(error);
                     }
                     if (results && results.rows.length > 0) {
-                        resolve(results.rows[0]);
+                        resolve({ hostVan: results.rows[0] });
                     } else {
-                        reject(new Error(`No van with owner_id:${hostId} and van_id:${vanId} found`));
+                        resolve({ hostVan: null })
+                    }
+                }
+            )
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
+// INSERTS
+
+export const insertOwner = async (email, password, firstName, lastName) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                "INSERT INTO owner (email, password, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING *",
+                [email, password, firstName, lastName],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve(`Host added with ID: ${results.rows[0].owner_id}`)
                     }
                 }
             )

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom"
 import Logo from "../assets/images/logo.png"
-import { useAuth } from "../../AuthContext"
+import { useAuth } from "../../src/hooks/AuthContext"
 
 function Navbar() {
     const { loggedIn } = useAuth()

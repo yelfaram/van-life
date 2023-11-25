@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { useLoaderData, Form, useNavigate } from "react-router-dom"
+import { useLoaderData, Form, useNavigate, Link } from "react-router-dom"
 import { loginUser } from "../../api"
-import { useAuth } from "../../AuthContext"
+import { useAuth } from "../hooks/AuthContext"
 
 
 function Login() {
@@ -11,7 +11,7 @@ function Login() {
     const navigate = useNavigate();
     const { login } = useAuth();
     const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
 
     async function handleFormSubmit(e) {
         e.preventDefault()
@@ -21,8 +21,8 @@ function Login() {
         const password = formData.get("password")
 
         if (!email || !password) {
-            setError("Please enter both an email and password.");
-            return;
+            setError("Please enter both an email and password.")
+            return
         }
 
         setLoading(true)
@@ -74,6 +74,11 @@ function Login() {
                     {loading ? "Signing in ..." : "Sign in"}
                 </button>
             </Form>
+            <div className="login--create">
+                <p>
+                    Don&#39;t have an account? <Link to="/register">Create one now</Link>
+                </p>
+            </div>
         </div> 
     )   
 }

@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { logoutUser } from "../../api"
-import { useAuth } from "../../AuthContext"
+import { useAuth } from "../../src/hooks/AuthContext"
 
 function Logout() {
     const { logout } = useAuth()

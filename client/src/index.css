@@ -324,6 +324,107 @@ footer {
   cursor: not-allowed;
 }
 
+.login--create {
+  margin-top: 45px;
+}
+
+.login--create > p {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.login--create > p > a {
+  text-decoration: none;
+  color: #FF8C38;
+  font-weight: 700;
+}
+
+/* REGISTER */
+.register--container {
+  padding: 50px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register--form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 700px;
+  margin-top: 50px;
+}
+
+.register--form input {
+  border: 1px solid rgba(209, 213, 219);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  height: 45px;
+
+  text-indent: 15px;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.register--form > div {
+  width: 100%;
+}
+
+.register--form > div > input {
+  width: 50%;
+}
+
+.register--names > input:first-of-type {
+  border-radius: 6px 0 0 0;
+  border-bottom: none;
+  border-right: none;
+}
+
+.register--names > input:last-of-type {
+  border-radius: 0 6px 0 0;
+  border-bottom: none;
+}
+
+.register--passwords > input:first-of-type {
+  border-radius: 0 0 0 6px;
+  border-top: none;
+  border-right: none;
+}
+
+.register--passwords > input:last-of-type {
+  border-radius: 0 0 6px 0;
+  border-top: none;
+}
+
+.register--form input:focus {
+  outline: none;
+}
+
+.register--form > button {
+  margin-top: 25px;
+  border-radius: 6px;
+  background-color: #FF8C38;
+  border: none;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  height: 55px;
+  cursor: pointer;
+  transition: transform .1s ease-in-out;
+
+  color: #FFF;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.register--form > button:hover {
+  transform: translate(1px, 1px);
+}
+
+.register--form > button:disabled {
+  background-color: #aaaaaa;
+  cursor: not-allowed;
+}
+
 /* VANS */
 
 .vans--container {
