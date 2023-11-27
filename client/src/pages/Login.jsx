@@ -30,7 +30,7 @@ function Login() {
 
         setLoading(true)
 
-        const defaultPath = userType === "owner" ? "/host" : "/"
+        const defaultPath = userType === "host" ? "/host" : "/"
         const pathname = new URL(window.location.href).searchParams.get("redirectTo") || defaultPath
 
         try {
@@ -38,7 +38,7 @@ function Login() {
 
             if (success) {
                 // pass user type here to save globally
-                login() // updates global context state
+                login(userType) // updates global context state
                 navigate(pathname) // redirect user back to host or whatever protected page he accessed
             } else {
                 setError(`Login failed: ${message}`)
@@ -79,7 +79,7 @@ function Login() {
                         <input
                         type="radio"
                         {...register("userType", { required: "User type is required" })}
-                        value="owner"
+                        value="host"
                         />
                     </label>
                     <label>

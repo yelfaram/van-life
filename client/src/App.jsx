@@ -2,7 +2,6 @@ import About from "./pages/About"
 import Home from "./pages/Home"
 import NotFound from "./pages/NotFound"
 import Login from "./pages/Login"
-import { loader as loginLoader } from "./pages/Login.loader"
 import Logout from "./pages/Logout"
 import Register from "./pages/Register"
 import Vans from "./pages/Vans/Vans"
@@ -52,7 +51,6 @@ const router = createBrowserRouter(
             <Route 
                 path="login" 
                 element={<Login />} 
-                loader={loginLoader}
             />
             <Route 
                 path="logout"

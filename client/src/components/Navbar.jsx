@@ -3,7 +3,8 @@ import Logo from "../assets/images/logo.png"
 import { useAuth } from "../../src/hooks/AuthContext"
 
 function Navbar() {
-    const { loggedIn } = useAuth()
+    const { authData } = useAuth();
+    const { loggedIn } = authData || {};
 
     const activeStyles = {
         textDecoration: "underline",

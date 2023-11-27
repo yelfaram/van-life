@@ -19,11 +19,11 @@ function Register() {
     
 
     async function onSubmit(data) {
-        const { firstName, lastName, email, password, confirmPassword, userType } = data
+        const { firstName, lastName, email, password, userType } = data
         
         setLoading(true);
 
-        const defaultPath = userType === "owner" ? "/host" : "/"
+        const defaultPath = userType === "host" ? "/host" : "/"
         const pathname = new URL(window.location.href).searchParams.get("redirectTo") || defaultPath
 
         try {
@@ -32,12 +32,12 @@ function Register() {
                 lastName,
                 email,
                 password,
-                confirmPassword,
+                userType,
             })
 
             if (success) {
                 // pass user type here to save globally
-                login() // updates global context state
+                login(userType) // updates global context state
                 navigate(pathname)
             } else {
                 setError(`Registration failed: ${message}`);
@@ -99,7 +99,7 @@ function Register() {
                         <input
                         type="radio"
                         {...register("userType", { required: "User type is required" })}
-                        value="owner"
+                        value="host"
                         />
                     </label>
                     <label>
