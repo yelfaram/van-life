@@ -1,19 +1,26 @@
+import { query } from "express";
 import connection from "./db/connection.js";
 
-export const authenticateUser = async (email, password) => {
+export const authenticateUser = async (email, password, userType) => {
+    let query = "SELECT owner_id FROM owner WHERE email = $1 AND password = $2"
+
+    if (userType === "renter") {
+        query = "SELECT renter_id FROM renter WHERE email = $1 AND password = $2";
+    }
+
     try {
         return await new Promise((resolve, reject) => {
             connection.query(
-                "SELECT owner_id FROM owner WHERE email = $1 AND password = $2",
+                query,
                 [email, password],
                 (error, results) => {
                     if (error) {
                         reject(error);
                     }
                     if (results && results.rows.length > 0) {
-                        resolve({ owner: results.rows[0]});
+                        resolve({ user: results.rows[0]});
                     } else {
-                        resolve({ owner: null });
+                        resolve({ user: null });
                     }
                 }
             );
@@ -130,6 +137,28 @@ export const insertOwner = async (email, password, firstName, lastName) => {
                     }
                     if (results && results.rows.length > 0) {
                         resolve(`Host added with ID: ${results.rows[0].owner_id}`)
+                    }
+                }
+            )
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
+export const insertRenter = async (email, password, firstName, lastName) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                "INSERT INTO renter (email, password, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING *",
+                [email, password, firstName, lastName],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve(`Renter added with ID: ${results.rows[0].renter_id}`)
                     }
                 }
             )

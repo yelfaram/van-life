@@ -75,4 +75,9 @@ VALUES
   (3, 'Dreamfinder', 65, 'Dreamfinder is the perfect van to travel in and experience. With a ceiling height of 2.1m, you can stand up in this van and there is great head room. The floor is a beautiful glass-reinforced plastic (GRP) which is easy to clean and very hard wearing. A large rear window and large side windows make it really light inside and keep it well ventilated.', 'https://assets.scrimba.com/advanced-react/react-router/dreamfinder.png', 'simple'),
   (3, 'The Cruiser', 120, 'The Cruiser is a van for those who love to travel in comfort and luxury. With its many windows, spacious interior and ample storage space, the Cruiser offers a beautiful view wherever you go.', 'https://assets.scrimba.com/advanced-react/react-router/the-cruiser.png', 'luxury');
 
+INSERT INTO
+  renter (email, password, first_name, last_name)
+VALUES 
+  ('j@g.com', 'j123', 'Jonathan', 'Gates');
+
 COMMIT;

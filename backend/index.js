@@ -33,14 +33,19 @@ app.get('/', (req, res) => {
 
 // ROUTES - LOGIN/LOGOUT/REGISTER
 app.post('/login', async (req, res) => {
-  const {email, password} = req.body;
+  const {email, password, userType} = req.body;
 
   try {
-    const result = await vanLife.authenticateUser(email, password);
-    const user = result.owner;
+    const result = await vanLife.authenticateUser(email, password, userType);
+    const user = result.user;
 
-    if (user && user.owner_id) {
-      req.session.hostId = user.owner_id,
+    if (user) {
+      if (userType === "host") {
+        req.session.hostId = user.owner_id;
+      } else if (userType === "renter") {
+        req.session.renterId = user.renter_id;
+      }
+
       res.json({ success: true, message: 'Login successful'})
     } else {
       res.status(401).json({ success: false, message: 'Invalid credentials' });
@@ -57,18 +62,26 @@ app.get('/logout', async (req, res) => {
 })
 
 app.post('/register', async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, userType } = req.body;
 
   try {
-    const result = await vanLife.authenticateUser(email, password);
-    const user = result.owner;
+    const result = await vanLife.authenticateUser(email, password, userType);
+    const user = result.user;
 
     if (user) {
       res.status(409).json({ success: false, message: 'User already exists with that email'})
-    } else {
-      const msg = await vanLife.insertOwner(email, password, firstName, lastName)
-      res.json({ success: true, message: msg })
+      return;
+    } 
+
+    let msg
+    if (userType === "host") {
+      msg = await vanLife.insertOwner(email, password, firstName, lastName)
+    } else if (userType === "renter") {
+      msg = await vanLife.insertRenter(email, password, firstName, lastName)
     }
+
+    res.json({ success: true, message: msg })
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: err.message });
