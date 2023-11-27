@@ -1,48 +1,51 @@
-import { useState } from "react"
-import { useLoaderData, Form, useNavigate, Link } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { useNavigate, Link } from "react-router-dom"
+import { useForm } from "react-hook-form";
 import { loginUser } from "../../api"
 import { useAuth } from "../hooks/AuthContext"
 
 
 function Login() {
-    // loader message for protected routes
-    const message = useLoaderData()
-
     const navigate = useNavigate();
     const { login } = useAuth();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
 
-    async function handleFormSubmit(e) {
-        e.preventDefault()
+    // react-hook-form
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm()
 
-        const formData = new FormData(e.target)
-        const email = formData.get("email")
-        const password = formData.get("password")
+    // message for protected routes
+    useEffect(() => {
+        const message = new URL(window.location.href).searchParams.get("message")
+        if (message) setMessage(message)
+    }, [message])
 
-        if (!email || !password) {
-            setError("Please enter both an email and password.")
-            return
-        }
+    async function onSubmit(data) {
+        const { email, password, userType } = data
 
         setLoading(true)
 
-        const pathname = new URL(window.location.href).searchParams.get("redirectTo") || "/host"
+        const defaultPath = userType === "owner" ? "/host" : "/"
+        const pathname = new URL(window.location.href).searchParams.get("redirectTo") || defaultPath
 
         try {
-            const { success, message } = await loginUser({ email, password })
+            const { success, message } = await loginUser({ email, password, userType })
 
             if (success) {
-                login()
-                navigate(pathname)
+                // pass user type here to save globally
+                login() // updates global context state
+                navigate(pathname) // redirect user back to host or whatever protected page he accessed
             } else {
-                console.error("Login failed:", message);
                 setError(`Login failed: ${message}`)
                 return new Response(`Login failed: ${message}`, { status: 401 });
             }
         } catch (err) {
             setError(err.message)
-            console.error("Error:", err);
         } finally {
             setLoading(false)
         }
@@ -51,29 +54,47 @@ function Login() {
     return (
         <div className="login--container">
             <h1>Sign in to your account</h1>
-            { message && <h4 className="red">{ message }</h4>}
-            <br />
-            { error && <h4 className="red">{ error }</h4>}
-            <Form 
-                method="post" 
+            { message && <><h4 className="red">{ message }</h4><br /></>}
+            {Object.keys(errors).map((key) => (
+                <h4 key={key} className="red">{errors[key]?.message}</h4>
+            ))}
+            { error && <><br /><h4 className="red">{ error }</h4></>}
+            <form
                 className="login--form"
-                replace
-                onSubmit={handleFormSubmit}
+                onSubmit={handleSubmit(onSubmit)}
             >
                 <input 
                     type="email"
-                    name="email"
+                    {...register("email", { required: "Email is required" })}
                     placeholder="Email address"
                 />
                 <input 
                     type="password"
-                    name="password"
+                    {...register("password", { required: "Password is required" })}
                     placeholder="Password"
                 />
-                <button disabled={loading}>
+                <div className="login--types">
+                    <label>
+                        Host
+                        <input
+                        type="radio"
+                        {...register("userType", { required: "User type is required" })}
+                        value="owner"
+                        />
+                    </label>
+                    <label>
+                        Renter
+                        <input
+                        type="radio"
+                        {...register('userType', { required: "User type is required" })}
+                        value="renter"
+                        />
+                    </label>
+                </div>
+                <button type="submit" disabled={loading}>
                     {loading ? "Signing in ..." : "Sign in"}
                 </button>
-            </Form>
+            </form>
             <div className="login--create">
                 <p>
                     Don&#39;t have an account? <Link to="/register">Create one now</Link>

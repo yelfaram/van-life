@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { Form, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { registerUser } from "../../api"
 import { useAuth } from "../hooks/AuthContext"
 
@@ -8,31 +9,22 @@ function Register() {
     const { login } = useAuth();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        getValues,
+    } = useForm()
     
 
-    async function handleFormSubmit(e) {
-        e.preventDefault();
-
-        const formData = new FormData(e.target);
-        const firstName = formData.get("firstName");
-        const lastName = formData.get("lastName");
-        const email = formData.get("email");
-        const password = formData.get("password");
-        const confirmPassword = formData.get("confirmPassword");
-
-        if (!firstName || !lastName || !email || !password || !confirmPassword) {
-            setError("Please fill in all fields");
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            setError("Passwords do not match");
-            return;
-        }
-
+    async function onSubmit(data) {
+        const { firstName, lastName, email, password, confirmPassword, userType } = data
+        
         setLoading(true);
 
-        const pathname = new URL(window.location.href).searchParams.get("redirectTo") || "/"
+        const defaultPath = userType === "owner" ? "/host" : "/"
+        const pathname = new URL(window.location.href).searchParams.get("redirectTo") || defaultPath
 
         try {
             const { success, message } = await registerUser({
@@ -44,15 +36,14 @@ function Register() {
             })
 
             if (success) {
-                login()
+                // pass user type here to save globally
+                login() // updates global context state
                 navigate(pathname)
             } else {
                 setError(`Registration failed: ${message}`);
-                console.error("Registration failed:", message);
             }
         } catch (err) {
             setError(err.message)
-            console.error("Error:", err);
         } finally {
             setLoading(false);
         }
@@ -61,46 +52,69 @@ function Register() {
     return (
         <div className="register--container">
             <h1>Create an account</h1>
-            { error && <h4 className="red">{ error }</h4>}
-            <Form 
-                method="post" 
+            { error && <><h4 className="red">{ error }</h4><br /></>}
+            {Object.keys(errors).map((key) => (
+                <h4 key={key} className="red">{errors[key]?.message}</h4>
+            ))}
+            <form 
                 className="register--form"
-                replace
-                onSubmit={handleFormSubmit}
+                onSubmit={handleSubmit(onSubmit)}
             >
                 <div className="register--names">
                     <input 
                         type="text"
-                        name="firstName"
+                        {...register("firstName", { required: "First name is required" })}
                         placeholder="First name"
                     />
                     <input 
                         type="text"
-                        name="lastName"
+                        {...register("lastName", { required: "Last name is required" })}
                         placeholder="Last name"
                     />
                 </div>
                 <input 
                     type="email"
-                    name="email"
+                    {...register("email", { required: "Email is required" })}
                     placeholder="Email address"
                 />
                 <div className="register--passwords">
                     <input 
                         type="password"
-                        name="password"
+                        {...register("password", { required: "Password is required" })}
                         placeholder="Password"
                     />
                     <input 
                         type="password"
                         name="confirmPassword"
+                        {...register("confirmPassword", { 
+                            required: true,
+                            validate: value => value === getValues("password") || "Passwords do not match"
+                        })}
                         placeholder="Confirm password"
                     />
                 </div>
-                <button disabled={loading}>
+                <div className="register--types">
+                    <label>
+                        Host
+                        <input
+                        type="radio"
+                        {...register("userType", { required: "User type is required" })}
+                        value="owner"
+                        />
+                    </label>
+                    <label>
+                        Renter
+                        <input
+                        type="radio"
+                        {...register('userType', { required: "User type is required"  })}
+                        value="renter"
+                        />
+                    </label>
+                </div>
+                <button type="submit" disabled={loading}>
                     {loading ? "Creating account..." : "Create account"}
                 </button>
-            </Form>
+            </form>
         </div>
     )
 }
