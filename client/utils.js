@@ -9,6 +9,12 @@ export async function requireAuth(request) {
     if (!loggedIn) {
         throw redirect(`/login?message=You must be logged in as a host&redirectTo=${pathname}`)
     }
-    
+
+    if (userType === "host") {
+        return null
+    } else if (userType === "renter") {
+        throw redirect('/unauthorized')
+    }
+
     return null
 }

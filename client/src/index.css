@@ -158,6 +158,36 @@ footer {
   font-weight: 700;
 }
 
+/* 401 PAGE */
+.unauthorized {
+  padding: 150px 30px;
+  width: 100%;
+}
+
+.unauthorized h1 {
+  color: #161616;
+  font-size: 2.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 42px;
+}
+
+.unauthorized a {
+  text-decoration: none;
+  background-color: #161616;
+  border-radius: 5px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+
+  color: #FFF;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+
 /* LAYOUT */
 .layout {
   min-height: 100vh;

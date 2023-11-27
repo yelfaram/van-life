@@ -18,6 +18,7 @@ import { loader as hostVanDetailLoader } from "./pages/Host/HostVanDetail.loader
 import HostVanInfo from "./pages/Host/HostVanInfo"
 import HostVanPhotos from "./pages/Host/HostVanPhotos"
 import HostVanPricing from "./pages/Host/HostVanPricing"
+import Unauthorized from "./pages/Unauthorized"
 import Layout from "./components/Layout"
 import Error from "./components/Error"
 import HostLayout from "./components/Host/HostLayout"
@@ -106,6 +107,8 @@ const router = createBrowserRouter(
                     />
                 </Route>
             </Route>
+            
+            <Route path="unauthorized" element={<Unauthorized />} />
 
             <Route path="*" element={<NotFound />} />
         </Route>
