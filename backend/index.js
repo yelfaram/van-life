@@ -81,7 +81,6 @@ app.post('/register', async (req, res) => {
     }
 
     res.json({ success: true, message: msg })
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: err.message });
@@ -112,6 +111,22 @@ app.get('/vans/:id', async (req, res) => {
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: err.message });
+  }
+})
+
+app.post('/vans/:id/rent', async (req, res) => {
+  const vanId = req.params.id
+  const renterId = req.session.renterId
+  const { startDate, endDate } = req.body
+
+  console.log("Rent route called", vanId, renterId, startDate, endDate)
+
+  try {
+    const msg = await vanLife.insertRental(vanId, renterId, startDate, endDate)
+    res.json({ success: true, message: msg })
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
   }
 })
 

@@ -67,6 +67,7 @@ const router = createBrowserRouter(
                     index 
                     element={<Dashboard />} 
                     loader={hostVansLoader}
+                    errorElement={<Error />} 
                 />
                 <Route 
                     path="income" 

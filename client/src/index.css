@@ -735,6 +735,65 @@ footer {
   transform: translate(1px, 1px);
 }
 
+.van-detail--rent.disabled {
+  background-color: #aaaaaa;
+  cursor: not-allowed;
+}
+
+.van-detail--dates {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.van-detail--date-picker {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
+  font-family: Inter;
+  outline: none;
+  width: 150px;
+  box-sizing: border-box;
+}
+
+.van-detail--date-picker:hover {
+  border-color: #FF8C38;
+}
+
+.react-datepicker__header {
+  background-color: #FF8C38; 
+}
+
+.react-datepicker__current-month {
+  color: #FFF; /* current month color */
+}
+
+.react-datepicker__day:hover {
+  background-color: #FF8C38;
+  color: #FFF;
+}
+
+.react-datepicker__day--today {
+  background-color: #FFEAD0; /* today's date */
+}
+
+.react-datepicker__day--in-range {
+  background-color: #FFEAD0
+}
+
+.react-datepicker__day--selected {
+  background-color: #FF8C38; /* selected date */
+  color: #FFF;
+}
+
+.react-datepicker__day-name {
+  color: #FFF; /* day names color */
+}
+
 /* HOST VANS */
 .host-vans--header {
   margin: 0;

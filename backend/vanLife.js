@@ -168,3 +168,25 @@ export const insertRenter = async (email, password, firstName, lastName) => {
         throw new Error(err.message);
     }
 }
+
+export const insertRental = async (vanId, renterId, startDate, endDate) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                "INSERT INTO rental (van_id, renter_id, start_date, end_date) VALUES ($1, $2, $3, $4) RETURNING *",
+                [vanId, renterId, startDate, endDate],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve(`Rental added with ID: ${results.rows[0].rental_id} for User ID: ${renterId}`)
+                    }
+                }
+            ) 
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}

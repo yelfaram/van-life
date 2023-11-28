@@ -110,3 +110,25 @@ export async function logoutUser() {
     }
     return data
 }
+
+export async function rentVan(id, startDate, endDate) {
+    const res = await fetch(`http://localhost:3000/vans/${id.toString()}/rent`,
+        {
+            method: 'POST',
+            body: JSON.stringify({ startDate, endDate }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        } 
+    )
+    const data = await res.json();
+    if (!res.ok) {
+        throw {
+            message: data.message,
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+    return data
+}

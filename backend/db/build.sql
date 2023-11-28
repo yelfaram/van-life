@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS rental (
     rental_id serial PRIMARY KEY,
     van_id INT NOT NULL,
     renter_id INT NOT NULL,
-    start_date TIMESTAMP NOT NULL DEFAULT NOW(),
+    start_date TIMESTAMP NOT NULL,
+    end_date TIMESTAMP NOT NULL,
     FOREIGN KEY (van_id)
       REFERENCES van (van_id),
     FOREIGN KEY (renter_id)

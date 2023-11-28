@@ -1,8 +1,18 @@
-import React from "react"
+import React, { useState } from "react"
 import { Link, useLocation, useLoaderData, Await } from "react-router-dom"
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/translucent.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import Loading from "../../components/Loading"
+import { useAuth } from "../../hooks/AuthContext"
+import { rentVan } from "../../../api"
 
 function VanDetail() {
+    const { authData } = useAuth();
+    const { loggedIn } = authData || {};
+
     const { state } = useLocation()
     
     // defer promise
@@ -12,6 +22,98 @@ function VanDetail() {
     // if state exists we take value of state.searchParams if not just empty string
     const searchParams = state?.searchParams || ""
     const type = state?.typeFilter || "all"
+
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
+    async function handleRentVan(vanId) {
+        console.log(vanId);
+        try {
+            const {success, message} = await rentVan(vanId, startDate, endDate);
+            
+            if (success) {
+                console.log("handleRentVan()", message);
+            } else {
+                console.error("handleRentVan() error", message);
+            }
+        } catch (err) {
+            console.error("Error renting the van:", err.message)
+        }
+    }
+
+    function renderTippy(content, button) {
+        return (
+            <Tippy
+                content={content}
+                arrow={false}
+                placement="bottom"
+                animation="fade"
+                theme="translucent"
+            >
+                {button}
+            </Tippy>
+        )
+    }
+
+    function renderRentButton(vanId) {
+        console.log("renderRentButton", vanId)
+        const tippyContent = loggedIn 
+            ? "You must select both a start date and end date"
+            : "You must be logged in to rent a van";
+
+        const button = (
+            <button 
+                className={`van-detail--rent ${(!loggedIn || !startDate || !endDate) && 'disabled'}`}
+                onClick={() => handleRentVan(vanId)}
+            >
+                Rent this van
+            </button>
+        );
+
+        if (!loggedIn) {
+            return (
+                renderTippy(tippyContent, button)
+            )
+        }
+
+        const datePickers = (
+            <div className="van-detail--dates">
+                <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    selectsStart
+                    startDate={startDate}
+                    endDate={endDate}
+                    placeholderText="Start Date"
+                    className="van-detail--date-picker"
+                />
+                <DatePicker
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    selectsEnd
+                    startDate={startDate}
+                    endDate={endDate}
+                    minDate={startDate}
+                    placeholderText="End Date"
+                    className="van-detail--date-picker"
+                />
+            </div>
+        )
+        
+        /**
+         * If not logged in, render Tippy with the button.
+         * If logged in:
+         *      If both start and end dates are selected, render the button directly.
+         *      If either the start or end date is not selected, render Tippy with the button.
+         */
+        return (
+            <> 
+                {loggedIn && datePickers}
+                {(!loggedIn || !startDate || !endDate) && renderTippy(tippyContent, button)}
+                {startDate && endDate && button}
+            </>
+        )
+    }
 
     function renderVanDetailElement(van) {
         let styles
@@ -45,7 +147,7 @@ function VanDetail() {
                         </p>
                         <p className="van-detail--description">{van.description} </p>
 
-                        <button className="van-detail--rent">Rent this van</button>
+                        {renderRentButton(van.van_id)}
                     </div>    
                 </div>
             </>
