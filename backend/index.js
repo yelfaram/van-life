@@ -119,8 +119,6 @@ app.post('/vans/:id/rent', async (req, res) => {
   const renterId = req.session.renterId
   const { startDate, endDate } = req.body
 
-  console.log("Rent route called", vanId, renterId, startDate, endDate)
-
   try {
     const msg = await vanLife.insertRental(vanId, renterId, startDate, endDate)
     res.json({ success: true, message: msg })

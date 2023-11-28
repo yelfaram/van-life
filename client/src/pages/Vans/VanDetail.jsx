@@ -27,7 +27,6 @@ function VanDetail() {
     const [endDate, setEndDate] = useState(null);
 
     async function handleRentVan(vanId) {
-        console.log(vanId);
         try {
             const {success, message} = await rentVan(vanId, startDate, endDate);
             
@@ -56,7 +55,6 @@ function VanDetail() {
     }
 
     function renderRentButton(vanId) {
-        console.log("renderRentButton", vanId)
         const tippyContent = loggedIn 
             ? "You must select both a start date and end date"
             : "You must be logged in to rent a van";
