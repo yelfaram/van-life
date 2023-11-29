@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS rental (
     rental_id serial PRIMARY KEY,
     van_id INT NOT NULL,
     email VARCHAR( 255 ),
-    rental_rate INT NOT NULL,
+    total_cost INT NOT NULL,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
     FOREIGN KEY (van_id)

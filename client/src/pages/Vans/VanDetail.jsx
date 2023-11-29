@@ -27,8 +27,13 @@ function VanDetail() {
     const [endDate, setEndDate] = useState(null);
 
     async function handleRentVan(vanId, price) {
+        const oneDay = 24*60*60*1000 // one day in ms
+        const diffDaysMs = Math.abs(startDate - endDate)
+        const numDays = Math.round(diffDaysMs/oneDay)
+        const totalCost = price * numDays
+
         try {
-            const {success, message} = await rentVan(vanId, price, startDate, endDate);
+            const {success, message} = await rentVan(vanId, totalCost, startDate, endDate);
             
             if (success) {
                 console.log("handleRentVan()", message);

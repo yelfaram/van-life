@@ -133,10 +133,10 @@ app.post('/vans/:id/rent', async (req, res) => {
     email = renter.user.email
   }
   
-  const { rentalRate, startDate, endDate } = req.body
+  const { totalCost, startDate, endDate } = req.body
 
   try {
-    const msg = await vanLife.insertRental(vanId, email, rentalRate, startDate, endDate)
+    const msg = await vanLife.insertRental(vanId, email, totalCost, startDate, endDate)
     res.json({ success: true, message: msg })
   } catch (err) {
     console.error(err);

@@ -272,12 +272,12 @@ export const insertRenter = async (email, password, firstName, lastName) => {
     }
 }
 
-export const insertRental = async (vanId, email, rentalRate, startDate, endDate) => {
+export const insertRental = async (vanId, email, totalCost, startDate, endDate) => {
     try {
         return await new Promise((resolve, reject) => {
             connection.query(
-                "INSERT INTO rental (van_id, email, rental_rate, start_date, end_date) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-                [vanId, email, rentalRate, startDate, endDate],
+                "INSERT INTO rental (van_id, email, total_cost, start_date, end_date) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+                [vanId, email, totalCost, startDate, endDate],
                 (error, results) => {
                     if (error) {
                         reject(error);
