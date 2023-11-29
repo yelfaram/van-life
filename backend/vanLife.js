@@ -31,6 +31,54 @@ export const authenticateUser = async (email, password, userType) => {
     }
 }
 
+export const getHostById = async (hostId) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                "SELECT email, first_name, last_name FROM owner WHERE owner_id = $1",
+                [hostId],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve({ user: results.rows[0]});
+                    } else {
+                        resolve({ user: null });
+                    }
+                }
+            )
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
+export const getRenterById = async (renterId) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                "SELECT email, first_name, last_name FROM renter WHERE renter_id = $1",
+                [renterId],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve({ user: results.rows[0]});
+                    } else {
+                        resolve({ user: null });
+                    }
+                }
+            )
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
 export const getVans = async () => {
     try {
         return await new Promise((resolve, reject) => {
@@ -45,6 +93,61 @@ export const getVans = async () => {
                 }
             });
         });
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
+export const getAvailableVansForHost = async (hostId) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                `SELECT v.van_id, v.owner_id, v.name, v.price, v.description, v.image_url, v.type
+                FROM van v
+                JOIN owner o ON v.owner_id = o.owner_id
+                WHERE v.owner_id != $1`,
+                [hostId],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve({ vans: results.rows });
+                    } else {
+                        resolve({ vans: null })
+                    }
+                }
+            )
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
+export const getAvaliableVansForRenter = async () => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                `SELECT v.van_id, v.owner_id, v.name, v.price, v.description, v.image_url, v.type
+                FROM van v
+                WHERE v.van_id NOT IN (SELECT r.van_id
+                    FROM rental r
+                    WHERE NOW() BETWEEN r.start_date AND r.end_date
+                )`,
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve({ vans: results.rows });
+                    } else {
+                        resolve({ vans: null })
+                    }
+                }
+            )
+        })
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -169,18 +272,18 @@ export const insertRenter = async (email, password, firstName, lastName) => {
     }
 }
 
-export const insertRental = async (vanId, renterId, startDate, endDate) => {
+export const insertRental = async (vanId, email, rentalRate, startDate, endDate) => {
     try {
         return await new Promise((resolve, reject) => {
             connection.query(
-                "INSERT INTO rental (van_id, renter_id, start_date, end_date) VALUES ($1, $2, $3, $4) RETURNING *",
-                [vanId, renterId, startDate, endDate],
+                "INSERT INTO rental (van_id, email, rental_rate, start_date, end_date) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+                [vanId, email, rentalRate, startDate, endDate],
                 (error, results) => {
                     if (error) {
                         reject(error);
                     }
                     if (results && results.rows.length > 0) {
-                        resolve(`Rental added with ID: ${results.rows[0].rental_id} for User ID: ${renterId}`)
+                        resolve(`Rental added with ID: ${results.rows[0].rental_id} for User with email: ${email}`)
                     }
                 }
             ) 

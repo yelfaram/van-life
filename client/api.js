@@ -104,18 +104,17 @@ export async function loginUser(creds) {
 export async function logoutUser() {
     const res = await fetch("http://localhost:3000/logout", { credentials: "include" })
     const data = await res.json();
-    console.log("LogoutUser was called", data)
     if (!res.ok) {
         throw new Error(`Logout failed: ${data.message}`);
     }
     return data
 }
 
-export async function rentVan(id, startDate, endDate) {
+export async function rentVan(id, rentalRate, startDate, endDate) {
     const res = await fetch(`http://localhost:3000/vans/${id.toString()}/rent`,
         {
             method: 'POST',
-            body: JSON.stringify({ startDate, endDate }),
+            body: JSON.stringify({ rentalRate, startDate, endDate }),
             headers: {
                 "Content-Type": "application/json",
             },

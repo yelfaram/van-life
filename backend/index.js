@@ -90,9 +90,15 @@ app.post('/register', async (req, res) => {
 // ROUTES - VANS
 app.get('/vans', async (req, res) => {
   try {
-    const result = await vanLife.getVans()
+    let result
+    if (req.session.hostId) {
+      result = await vanLife.getAvailableVansForHost(req.session.hostId)
+    } else if (req.session.renterId) {
+      result = await vanLife.getAvaliableVansForRenter()
+    } else {
+      result = await vanLife.getVans()
+    }
     const vans = result.vans
-    
     res.json({ vans })
   } catch (err) {
     console.error(err)
@@ -116,11 +122,21 @@ app.get('/vans/:id', async (req, res) => {
 
 app.post('/vans/:id/rent', async (req, res) => {
   const vanId = req.params.id
-  const renterId = req.session.renterId
-  const { startDate, endDate } = req.body
+
+  
+  let email = ""
+  if (req.session.hostId) {
+    const host = await vanLife.getHostById(req.session.hostId)
+    email = host.user.email
+  } else if (req.session.renterId) {
+    const renter = await vanLife.getRenterById(req.session.renterId)
+    email = renter.user.email
+  }
+  
+  const { rentalRate, startDate, endDate } = req.body
 
   try {
-    const msg = await vanLife.insertRental(vanId, renterId, startDate, endDate)
+    const msg = await vanLife.insertRental(vanId, email, rentalRate, startDate, endDate)
     res.json({ success: true, message: msg })
   } catch (err) {
     console.error(err);

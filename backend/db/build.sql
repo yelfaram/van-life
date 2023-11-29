@@ -4,6 +4,9 @@ DROP TABLE IF EXISTS review, rental, renter, van, owner;
 
 DROP TYPE IF EXISTS van_types;
 
+DROP INDEX IF EXISTS idx_email_renter;
+DROP INDEX IF EXISTS idx_email_owner;
+
 CREATE TABLE IF NOT EXISTS owner (
     owner_id serial PRIMARY KEY,
     email VARCHAR ( 255 ) UNIQUE NOT NULL,
@@ -11,6 +14,8 @@ CREATE TABLE IF NOT EXISTS owner (
     first_name VARCHAR( 30 ) NOT NULL,
     last_name VARCHAR( 30 ) NOT NULL
 );
+
+CREATE INDEX idx_email_owner ON owner(email);
 
 CREATE TYPE van_types AS ENUM ('simple', 'rugged', 'luxury');
 
@@ -34,16 +39,17 @@ CREATE TABLE IF NOT EXISTS renter (
     last_name VARCHAR( 30 ) NOT NULL
 );
 
+CREATE INDEX idx_email_renter ON renter(email);
+
 CREATE TABLE IF NOT EXISTS rental (
     rental_id serial PRIMARY KEY,
     van_id INT NOT NULL,
-    renter_id INT NOT NULL,
+    email VARCHAR( 255 ),
+    rental_rate INT NOT NULL,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
     FOREIGN KEY (van_id)
-      REFERENCES van (van_id),
-    FOREIGN KEY (renter_id)
-      REFERENCES renter (renter_id)
+      REFERENCES van (van_id)
 );
 
 CREATE TABLE IF NOT EXISTS review (

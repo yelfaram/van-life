@@ -26,9 +26,9 @@ function VanDetail() {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
-    async function handleRentVan(vanId) {
+    async function handleRentVan(vanId, price) {
         try {
-            const {success, message} = await rentVan(vanId, startDate, endDate);
+            const {success, message} = await rentVan(vanId, price, startDate, endDate);
             
             if (success) {
                 console.log("handleRentVan()", message);
@@ -54,7 +54,7 @@ function VanDetail() {
         )
     }
 
-    function renderRentButton(vanId) {
+    function renderRentButton(vanId, price) {
         const tippyContent = loggedIn 
             ? "You must select both a start date and end date"
             : "You must be logged in to rent a van";
@@ -62,7 +62,7 @@ function VanDetail() {
         const button = (
             <button 
                 className={`van-detail--rent ${(!loggedIn || !startDate || !endDate) && 'disabled'}`}
-                onClick={() => handleRentVan(vanId)}
+                onClick={() => handleRentVan(vanId, price)}
             >
                 Rent this van
             </button>
@@ -145,7 +145,7 @@ function VanDetail() {
                         </p>
                         <p className="van-detail--description">{van.description} </p>
 
-                        {renderRentButton(van.van_id)}
+                        {renderRentButton(van.van_id, van.price)}
                     </div>    
                 </div>
             </>
