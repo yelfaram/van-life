@@ -13,15 +13,15 @@ function Transaction(props) {
 
     return (
         <div className="transaction--container">
-            <h2>${props.amount}</h2>
-            <p>{formatDate(props.date)}</p>
+            <h2>${props.total_cost}</h2>
+            <p>{formatDate(props.placed_date)}</p>
         </div>
     )
 }
 
 Transaction.propTypes = {
-    amount: PropTypes.number,
-    date: PropTypes.string,
+    total_cost: PropTypes.number,
+    placed_date: PropTypes.string,
 }
 
 export default Transaction

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import Transaction from "../../components/Host/Transaction"
+import React from "react"
+import { useLoaderData, Await } from "react-router-dom"
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -10,6 +10,9 @@ import {
     Legend,
   } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import Transaction from "../../components/Host/Transaction"
+import Loading from "../../components/Loading"
+import { isRentedVanWithinLast30Days } from "../../../utils"
 
 ChartJS.register(
     CategoryScale,
@@ -21,56 +24,89 @@ ChartJS.register(
 );
 
 function Income() {
-    const transactionsData = [
-        { amount: 720, date: "Nov 3, 2023", id: "1" },
-        { amount: 560, date: "Oct 22, 2023", id: "2" },
-        { amount: 980, date: "Oct 13, 2023", id: "3" },
-        { amount: 440, date: "Sep 23, 2023", id: "4" },
-        { amount: 140, date: "Sep 10, 2023", id: "5" },
-        { amount: 640, date: "Aug 20, 2023", id: "5" },
-        { amount: 700, date: "Aug 15, 2023", id: "6" },
-        { amount: 350, date: "Aug 5, 2023", id: "7" },
-        { amount: 500, date: "Jul 26, 2023", id: "8" },
-        { amount: 620, date: "Jul 20, 2023", id: "9" },
-        { amount: 310, date: "Jul 18, 2023", id: "10" },
-        { amount: 820, date: "Jul 10, 2023", id: "11" },
-    ]
-    
-    // helper function to check whether transaction is within last 30 days
-    function isWithinLast30Days(transaction) {
-        const currentDate = new Date();
-        const last30Days = new Date(currentDate);
-        last30Days.setDate(currentDate.getDate() - 30);
+    // defer promise
+    const { hostRentedVans } = useLoaderData()
 
-        const transactionDate = new Date(transaction.date);
-        return transactionDate >= last30Days && transactionDate <= currentDate;
+    function renderHostIncomeElements(hostRentedVans) {
+        console.log(hostRentedVans)
+        // get last 30 day rental transactions
+        const rentalsWithinLast30Days = hostRentedVans.filter(isRentedVanWithinLast30Days)
+        const totalIncome = rentalsWithinLast30Days.reduce((totalIncome, rentedVan) => totalIncome + rentedVan.total_cost, 0) || 0
+        const transactionElements = rentalsWithinLast30Days.map(rental => <Transaction key={rental.rental_id} {...rental} />)
+        
+        const barGraphData = generateBarGraphData(hostRentedVans);
+        const graphOptions = {
+            elements: {
+                bar: {
+                    borderRadius: {
+                        topLeft: 5,
+                        topRight: 5,
+                        bottomLeft: 0,
+                        bottomRight: 0,
+                    },
+                },
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+        
+        
+        return (
+            <>
+                <h1>${totalIncome}</h1>
+                <div className="income--graph">
+                    {barGraphData && <Bar data={barGraphData} options={graphOptions}/>}
+                </div>
+                <div className="transactions--container">
+                    <div>
+                        <h3>Your transactions ({transactionElements.length})</h3>
+                        <p>Last <span>30 days</span></p>
+                    </div>
+                    {transactionElements}
+                </div>
+            </>
+        )
+
     }
 
-    // get last 30 days transactions
-    const transactionElements = transactionsData
-        .filter(isWithinLast30Days)
-        .map(transaction => <Transaction key={transaction.id} {...transaction} />)
-
     // helper funciton to calculate total revenue for each month
-    function calculateMonthlyRevenues(transactions) {
+    function calculateMonthlyRevenues(hostRentedVans) {
         const monthlyRevenues = {}
 
-        transactions.forEach(transaction => {
-            const date = new Date(transaction.date); 
+        hostRentedVans.forEach(hostRentedVan => {
+            const date = new Date(hostRentedVan.placed_date); 
             const month = date.toLocaleString('default', { month: 'short' });
-            monthlyRevenues[month] = (monthlyRevenues[month] || 0) + transaction.amount
+            monthlyRevenues[month] = (monthlyRevenues[month] || 0) + hostRentedVan.total_cost
         })
 
         return monthlyRevenues
     }
 
-    function generateBarGraphData(transactions) {
-        const monthlyRevenues = calculateMonthlyRevenues(transactions);
-        const labels = Object.keys(monthlyRevenues);
-        const data = Object.values(monthlyRevenues);
+    // helper function to generate what the last 8 months were for
+    function getLastEightMonths() {
+        const today = new Date();
+        const months = [];
 
-        const backgroundColors = transactions.map(transaction =>
-            isWithinLast30Days(transaction) ? '#FF8C38' : '#FFEAD0'
+        for (let i = 7; i >= 0; i--) {
+            const month = new Date();
+            month.setMonth(today.getMonth() - i);
+            months.push(month.toLocaleString('default', { month: 'short' }));
+        }
+      
+        return months;
+    }
+
+    function generateBarGraphData(hostRentedVans) {
+        const monthlyRevenues = calculateMonthlyRevenues(hostRentedVans);
+        
+        const labels = getLastEightMonths();
+        const data = labels.map(month => monthlyRevenues[month] || 0);
+
+        const backgroundColors = labels.map(month =>
+            (month === new Date().toLocaleString('default', { month: 'short' })) ? '#FF8C38' : '#FFEAD0'
         );
 
         return {
@@ -84,45 +120,15 @@ function Income() {
         }
     }
 
-    const [barGraphData, setBarGraphData] = useState(null);
-    useEffect(() => {
-        const data = generateBarGraphData(transactionsData);
-        setBarGraphData(data);
-    }, []);
-
-    const options = {
-        elements: {
-            bar: {
-                borderRadius: {
-                    topLeft: 5,
-                    topRight: 5,
-                    bottomLeft: 0,
-                    bottomRight: 0,
-                },
-            },
-        },
-        plugins: {
-            legend: {
-                display: false
-            }
-        }
-    }
-
     return (
         <section className="income">
             <h2>Income</h2>
             <p>Last <span>30 days</span></p>
-            <h1>$2,260</h1>
-            <div className="income--graph">
-                {barGraphData && <Bar data={barGraphData} options={options}/>}
-            </div>
-            <div className="transactions--container">
-                <div>
-                    <h3>Your transactions ({transactionElements.length})</h3>
-                    <p>Last <span>30 days</span></p>
-                </div>
-                {transactionElements}
-            </div>
+            <React.Suspense fallback={<Loading />}>
+                <Await resolve={hostRentedVans}>
+                    {renderHostIncomeElements}
+                </Await>
+            </React.Suspense>
         </section>
     )
 }

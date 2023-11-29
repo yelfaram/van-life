@@ -44,8 +44,9 @@ CREATE INDEX idx_email_renter ON renter(email);
 CREATE TABLE IF NOT EXISTS rental (
     rental_id serial PRIMARY KEY,
     van_id INT NOT NULL,
-    email VARCHAR( 255 ),
+    email VARCHAR( 255 ) NOT NULL,
     total_cost INT NOT NULL,
+    placed_date TIMESTAMP NOT NULL DEFAULT NOW(),
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
     FOREIGN KEY (van_id)
@@ -53,14 +54,12 @@ CREATE TABLE IF NOT EXISTS rental (
 );
 
 CREATE TABLE IF NOT EXISTS review (
-    renter_id INT NOT NULL,
+    renter_email VARCHAR( 255 ) NOT NULL,
     van_id INT NOT NULL,
     rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
     date TIMESTAMP NOT NULL DEFAULT NOW(),
     text TEXT NOT NULL,
-    PRIMARY KEY (renter_id, van_id),
-    FOREIGN KEY (renter_id)
-      REFERENCES renter (renter_id),
+    PRIMARY KEY (renter_email, van_id),
     FOREIGN KEY (van_id)
       REFERENCES van (van_id)
 );
@@ -85,6 +84,24 @@ VALUES
 INSERT INTO
   renter (email, password, first_name, last_name)
 VALUES 
-  ('j@g.com', 'j123', 'Jonathan', 'Gates');
+  ('j@g.com', 'j123', 'Jonathan', 'Gates'),
+  ('a@b.com', 'password123', 'Alice', 'Johnson'),
+  ('c@d.com', 'securepass', 'Charlie', 'Smith'),
+  ('e@f.com', 'letmein', 'Eva', 'Williams'),
+  ('g@h.com', 'pass123', 'Gary', 'Davis');
+
+INSERT INTO rental (van_id, email, total_cost, placed_date, start_date, end_date)
+VALUES 
+  (1, 'j@g.com', 240, '2023-06-30 18:00:00', '2023-07-01 10:00:00', '2023-07-05 15:00:00'),
+  (2, 'a@b.com', 480, '2023-07-01 20:00:00', '2023-07-02 12:00:00', '2023-07-08 14:00:00'),
+  (3, 'c@d.com', 280, '2023-07-04 16:00:00', '2023-08-03 11:00:00', '2023-08-07 16:00:00'),
+  (4, 'e@f.com', 400, '2023-07-20 14:00:00', '2023-08-05 09:00:00', '2023-08-10 13:00:00'),
+  (5, 'g@h.com', 325, '2023-08-10 11:00:00', '2023-09-07 14:00:00', '2023-09-12 18:00:00'),
+  (6, 'j@g.com', 720, '2023-08-30 09:00:00', '2023-09-09 10:00:00', '2023-09-15 12:00:00'),
+  (1, 'a@b.com', 240, '2023-11-01 08:00:00', '2023-11-10 08:00:00', '2023-11-14 14:00:00'),
+  (2, 'c@d.com', 400, '2023-11-08 13:00:00', '2023-11-12 13:00:00', '2023-11-17 16:00:00'),
+  (3, 'e@f.com', 350, '2023-11-10 11:00:00', '2023-11-15 11:00:00', '2023-11-20 15:00:00'),
+  (4, 'g@h.com', 400, '2023-11-15 09:00:00', '2023-11-18 09:00:00', '2023-11-22 14:00:00');
+
 
 COMMIT;

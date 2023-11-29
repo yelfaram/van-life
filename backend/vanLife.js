@@ -226,6 +226,33 @@ export const getHostVanById = async (hostId, vanId) => {
     }
 }
 
+export const getHostRentedVans = async (hostId) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                `SELECT r.rental_id, r.van_id, r.total_cost, r.placed_date, r.start_date, r.end_date 
+                FROM rental r
+                JOIN van v ON r.van_id = v.van_id
+                WHERE v.owner_id = $1`,
+                [hostId],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve({ hostRentedVans: results.rows })
+                    } else {
+                        resolve({ hostRentedVans: null })
+                    }
+                }
+            )
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
 // INSERTS
 
 export const insertOwner = async (email, password, firstName, lastName) => {

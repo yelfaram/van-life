@@ -3,10 +3,11 @@ import { Outlet, Link, Await, useLoaderData } from "react-router-dom"
 import { BsStarFill } from "react-icons/bs"
 import HostVan from "../../components/Host/HostVan"
 import Loading from "../../components/Loading"
+import { isRentedVanWithinLast30Days } from "../../../utils"
 
 function Dashboard() {
     // defer promise
-    const { allHostVans } = useLoaderData()
+    const { allHostVans, hostRentedVans } = useLoaderData()
 
     function renderHostVansElements(allHostVans) {
         const hostVanElements = allHostVans.map(hostVan => {
@@ -20,14 +21,28 @@ function Dashboard() {
         )
     }
 
+    function renderHostIncome(hostRentedVans) {
+        const totalIncome  = hostRentedVans
+            .filter(isRentedVanWithinLast30Days)
+            .reduce((totalIncome, rentedVan) => totalIncome + rentedVan.total_cost, 0) || 0
+
+        return (
+            <div>
+                <h2>Welcome!</h2>
+                <p>Income last <span>30 days</span></p>
+                <h1>${totalIncome}</h1>
+            </div>
+        )
+    }
+
     return (
         <>
             <section className="dashboard--income">
-                <div>
-                    <h2>Welcome!</h2>
-                    <p>Income last <span>30 days</span></p>
-                    <h1>$2,260</h1>
-                </div>
+                <React.Suspense fallback={<Loading />}>
+                    <Await resolve={hostRentedVans}>
+                        {renderHostIncome}
+                    </Await>
+                </React.Suspense>
                 <Link
                     to="income"
                 >

@@ -58,6 +58,21 @@ export async function getHostVanById(id) {
     return data.hostVan
 }
 
+export async function getHostRentedVans() {
+    const res = await fetch("http://localhost:3000/host/vans/rented", { credentials: "include" })
+    if (!res.ok) {
+        const error = {
+            message: "Failed to fetch host rented vans",
+            statusText: res.statusText,
+            status: res.status,
+        }
+        console.error("Error in getHostRentals:", error)
+        throw error
+    }
+    const data = await res.json()
+    return data.hostRentedVans
+}
+
 export async function registerUser(creds) {
     const res = await fetch("http://localhost:3000/register",
     {

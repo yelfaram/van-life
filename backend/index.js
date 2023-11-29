@@ -158,6 +158,19 @@ app.get('/host/vans', async (req, res) => {
   }
 })
 
+app.get('/host/vans/rented', async (req, res) => {
+  const hostId = req.session.hostId
+  try {
+    const result = await vanLife.getHostRentedVans(hostId)
+    const hostRentedVans = result.hostRentedVans
+
+    res.json({ hostRentedVans })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message });
+  }
+})
+
 app.get('/host/vans/:id', async (req, res) => {
   const hostId = req.session.hostId
   const vanId = req.params.id
@@ -172,7 +185,6 @@ app.get('/host/vans/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 })
-
 
 // app listens to 3000 port
 app.listen(PORT, () => {

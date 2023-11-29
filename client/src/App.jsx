@@ -9,7 +9,9 @@ import { loader as vansLoader } from "./pages/Vans/Vans.loader"
 import VanDetail from "./pages/Vans/VanDetail"
 import { loader as vanDetailLoader } from "./pages/Vans/VanDetail.loader"
 import Dashboard from "./pages/Host/Dashboard"
+import { loader as dashboardLoader } from "./pages/Host/Dashboard.loader"
 import Income from "./pages/Host/Income"
+import { loader as incomeLoader } from "./pages/Host/Income.loader"
 import Reviews from "./pages/Host/Reviews"
 import HostVans from "./pages/Host/HostVans"
 import { loader as hostVansLoader } from "./pages/Host/HostVans.loader"
@@ -66,13 +68,13 @@ const router = createBrowserRouter(
                 <Route 
                     index 
                     element={<Dashboard />} 
-                    loader={hostVansLoader}
+                    loader={dashboardLoader}
                     errorElement={<Error />} 
                 />
                 <Route 
                     path="income" 
                     element={<Income />}
-                    loader={async ({ request }) => await requireAuth(request)}
+                    loader={incomeLoader}
                 />
                 <Route 
                     path="vans" 

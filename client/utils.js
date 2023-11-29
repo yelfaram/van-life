@@ -18,3 +18,13 @@ export async function requireAuth(request) {
 
     return null
 }
+
+export function isRentedVanWithinLast30Days(rentedVan) {
+    const currentDate = new Date();
+    const last30Days = new Date(currentDate);
+    last30Days.setDate(currentDate.getDate() - 30);
+
+    const transactionDate = new Date(rentedVan.placed_date);
+
+    return transactionDate >= last30Days && transactionDate <= currentDate;
+}
