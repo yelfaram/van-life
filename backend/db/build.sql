@@ -8,11 +8,11 @@ DROP INDEX IF EXISTS idx_email_renter;
 DROP INDEX IF EXISTS idx_email_owner;
 
 CREATE TABLE IF NOT EXISTS owner (
-    owner_id serial PRIMARY KEY,
-    email VARCHAR ( 255 ) UNIQUE NOT NULL,
-    password VARCHAR ( 50 ) NOT NULL,
-    first_name VARCHAR( 30 ) NOT NULL,
-    last_name VARCHAR( 30 ) NOT NULL
+  owner_id serial PRIMARY KEY,
+  email VARCHAR ( 255 ) UNIQUE NOT NULL,
+  password VARCHAR ( 50 ) NOT NULL,
+  first_name VARCHAR( 30 ) NOT NULL,
+  last_name VARCHAR( 30 ) NOT NULL
 );
 
 CREATE INDEX idx_email_owner ON owner(email);
@@ -20,48 +20,48 @@ CREATE INDEX idx_email_owner ON owner(email);
 CREATE TYPE van_types AS ENUM ('simple', 'rugged', 'luxury');
 
 CREATE TABLE IF NOT EXISTS van (
-    van_id serial PRIMARY KEY,
-    owner_id INT NOT NULL,
-    name VARCHAR( 30 ) UNIQUE NOT NULL,
-    price INTEGER NOT NULL,
-    description TEXT NOT NULL,
-    image_url VARCHAR( 255 ) NOT NULL,
-    type van_types NOT NULL,
-    FOREIGN KEY (owner_id)
-      REFERENCES owner (owner_id)
+  van_id serial PRIMARY KEY,
+  owner_id INT NOT NULL,
+  name VARCHAR( 30 ) UNIQUE NOT NULL,
+  price INTEGER NOT NULL,
+  description TEXT NOT NULL,
+  image_url VARCHAR( 255 ) NOT NULL,
+  type van_types NOT NULL,
+  FOREIGN KEY (owner_id)
+    REFERENCES owner (owner_id)
 );
 
 CREATE TABLE IF NOT EXISTS renter (
-    renter_id serial PRIMARY KEY,
-    email VARCHAR ( 255 ) UNIQUE NOT NULL,
-    password VARCHAR ( 50 ) NOT NULL,
-    first_name VARCHAR( 30 ) NOT NULL,
-    last_name VARCHAR( 30 ) NOT NULL
+  renter_id serial PRIMARY KEY,
+  email VARCHAR ( 255 ) UNIQUE NOT NULL,
+  password VARCHAR ( 50 ) NOT NULL,
+  first_name VARCHAR( 30 ) NOT NULL,
+  last_name VARCHAR( 30 ) NOT NULL
 );
 
 CREATE INDEX idx_email_renter ON renter(email);
 
 CREATE TABLE IF NOT EXISTS rental (
-    rental_id serial PRIMARY KEY,
-    van_id INT NOT NULL,
-    email VARCHAR( 255 ) NOT NULL,
-    total_cost INT NOT NULL,
-    placed_date TIMESTAMP NOT NULL DEFAULT NOW(),
-    start_date TIMESTAMP NOT NULL,
-    end_date TIMESTAMP NOT NULL,
-    FOREIGN KEY (van_id)
-      REFERENCES van (van_id)
+  rental_id serial PRIMARY KEY,
+  van_id INT NOT NULL,
+  email VARCHAR( 255 ) NOT NULL,
+  total_cost INT NOT NULL,
+  placed_date TIMESTAMP NOT NULL DEFAULT NOW(),
+  start_date TIMESTAMP NOT NULL,
+  end_date TIMESTAMP NOT NULL,
+  FOREIGN KEY (van_id)
+    REFERENCES van (van_id)
 );
 
 CREATE TABLE IF NOT EXISTS review (
-    renter_email VARCHAR( 255 ) NOT NULL,
-    van_id INT NOT NULL,
-    rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
-    date TIMESTAMP NOT NULL DEFAULT NOW(),
-    text TEXT NOT NULL,
-    PRIMARY KEY (renter_email, van_id),
-    FOREIGN KEY (van_id)
-      REFERENCES van (van_id)
+  renter_email VARCHAR( 255 ) NOT NULL,
+  van_id INT NOT NULL,
+  rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  date TIMESTAMP NOT NULL DEFAULT NOW(),
+  text TEXT NOT NULL,
+  PRIMARY KEY (renter_email, van_id),
+  FOREIGN KEY (van_id)
+    REFERENCES van (van_id)
 );
 
 INSERT INTO 
