@@ -27,7 +27,7 @@ function HostNavbar() {
                 to="vans"
                 style={( {isActive} ) => isActive ? activeStyles : null}
             >
-                Vans
+                My Vans
             </NavLink>
             <NavLink 
                 to="reviews"
