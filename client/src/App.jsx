@@ -4,6 +4,8 @@ import NotFound from "./pages/NotFound"
 import Login from "./pages/Login"
 import Logout from "./pages/Logout"
 import Register from "./pages/Register"
+import Rentals from "./pages/Rentals"
+import { loader as rentalsLoader } from "./pages/Rentals.loader"
 import Vans from "./pages/Vans/Vans"
 import { loader as vansLoader } from "./pages/Vans/Vans.loader"
 import VanDetail from "./pages/Vans/VanDetail"
@@ -30,7 +32,6 @@ import {
     createRoutesFromElements,  
     Route 
 } from "react-router-dom"
-// import "../server"
 import { requireAuth } from "../utils"
 import { AuthProvider } from "../src/hooks/AuthContext"
 
@@ -49,6 +50,12 @@ const router = createBrowserRouter(
                 path="vans/:id" 
                 element={<VanDetail />} 
                 loader={vanDetailLoader}
+                errorElement={<Error />} 
+            />
+            <Route 
+                path="rentals"
+                element={<Rentals />}
+                loader={rentalsLoader}
                 errorElement={<Error />} 
             />
             <Route 

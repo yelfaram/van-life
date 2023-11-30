@@ -87,6 +87,27 @@ app.post('/register', async (req, res) => {
   }
 })
 
+// ROUTES - RENTALS
+app.get('/rentals', async (req, res) => {
+  try {
+    let email = ""
+
+    if (req.session.hostId) {
+      const host = await vanLife.getHostById(req.session.hostId)
+      email = host.user.email
+    } else if (req.session.renterId) {
+      const renter = await vanLife.getRenterById(req.session.renterId)
+      email = renter.user.email
+    }
+    const result = await vanLife.getUserRentals(email)
+    const rentals = result.rentals
+    res.json({ rentals })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message });
+  }
+})
+
 // ROUTES - VANS
 app.get('/vans', async (req, res) => {
   try {

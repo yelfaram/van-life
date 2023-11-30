@@ -253,6 +253,33 @@ export const getHostRentedVans = async (hostId) => {
     }
 }
 
+export const getUserRentals = async (email) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                `SELECT v.van_id, v.name, v.image_url, v.type, r.total_cost, r.start_date, r.end_date
+                FROM rental r 
+                JOIN van v on r.van_id = v.van_id
+                WHERE email = $1`,
+                [email],
+                (error, results) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve({ rentals: results.rows })
+                    } else {
+                        resolve({ rentals: null })
+                    }
+                }
+            )
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
 // INSERTS
 
 export const insertOwner = async (email, password, firstName, lastName) => {

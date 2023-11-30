@@ -36,6 +36,14 @@ function Navbar() {
                 >
                     About
                 </NavLink>
+                { loggedIn && (
+                    <NavLink 
+                        to="rentals"
+                        style={( {isActive} ) => isActive ? activeStyles : null}
+                    >
+                        My Rentals
+                    </NavLink>
+                )}
                 <NavLink 
                     to={loggedIn ? "logout" : "login"}
                     style={( {isActive} ) => isActive ? activeStyles : null}

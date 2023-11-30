@@ -1,5 +1,5 @@
 import React from "react"
-import { Outlet, Link, Await, useLoaderData } from "react-router-dom"
+import { Link, Await, useLoaderData } from "react-router-dom"
 import { BsStarFill } from "react-icons/bs"
 import HostVan from "../../components/Host/HostVan"
 import Loading from "../../components/Loading"
@@ -74,8 +74,6 @@ function Dashboard() {
                     </Await>
                 </React.Suspense>
             </section>
-
-            <Outlet />
         </>
     )
 }
