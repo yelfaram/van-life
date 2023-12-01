@@ -1,6 +1,7 @@
 import { useState } from "react"
 import PropTypes from 'prop-types';
 import Modal from "./Modal"
+import { formatDate } from "../../../utils"
 
 function Rental(props) {
     // for modal review form
@@ -19,11 +20,6 @@ function Rental(props) {
         case "luxury":
             styles = { backgroundColor: "#161616" }
             break;
-    }
-
-    function formatDate(date) {
-        const options = { month: 'long', day: 'numeric', year: 'numeric' };
-        return new Date(date).toLocaleDateString('en-US', options);
     }
 
     return (

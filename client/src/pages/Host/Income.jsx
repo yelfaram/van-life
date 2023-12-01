@@ -12,7 +12,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import Transaction from "../../components/Host/Transaction"
 import Loading from "../../components/Loading"
-import { isRentedVanWithinLast30Days } from "../../../utils"
+import { isWithinLast30Days } from "../../../utils"
 
 ChartJS.register(
     CategoryScale,
@@ -29,7 +29,7 @@ function Income() {
 
     function renderHostIncomeElements(hostRentedVans) {
         // get last 30 day rental transactions
-        const rentalsWithinLast30Days = hostRentedVans.filter(isRentedVanWithinLast30Days)
+        const rentalsWithinLast30Days = hostRentedVans.filter(rentedVan => isWithinLast30Days(rentedVan, "placed_date"))
         const totalIncome = rentalsWithinLast30Days.reduce((totalIncome, rentedVan) => totalIncome + rentedVan.total_cost, 0) || 0
         const transactionElements = rentalsWithinLast30Days.map(rental => <Transaction key={rental.rental_id} {...rental} />)
         

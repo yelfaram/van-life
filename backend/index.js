@@ -219,6 +219,19 @@ app.get('/host/vans/:id', async (req, res) => {
   }
 })
 
+app.get('/host/reviews', async (req, res) => {
+  const hostId = req.session.hostId
+  try {
+    const result = await vanLife.getHostReviews(hostId)
+    const hostReviews = result.hostReviews
+
+    res.json({ hostReviews })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message });
+  }
+})
+
 // app listens to 3000 port
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}.`);

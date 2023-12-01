@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { BsStarFill } from "react-icons/bs"
+import { formatDate } from "../../../utils"
 
 function Review(props) {
     return (
@@ -8,10 +9,10 @@ function Review(props) {
                 <BsStarFill className="review--star" key={i} />
             ))}
             <div className="review--info">
-                <p className="review--name">{props.name}</p>
-                <p className="review--date">{props.date}</p>
+                <p className="review--name">{props.first_name} {props.last_name}</p>
+                <p className="review--date">{formatDate(props.date)}</p>
             </div>
-            <p>{props.text}</p>
+            <p>{props.description}</p>
             <hr />
         </div>
     )
@@ -19,9 +20,10 @@ function Review(props) {
 
 Review.propTypes = {
     rating: PropTypes.number,
-    name: PropTypes.string,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
     date: PropTypes.string,
-    text: PropTypes.string,
+    description: PropTypes.string,
 }
 
 export default Review

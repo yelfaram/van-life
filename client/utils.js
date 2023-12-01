@@ -19,12 +19,17 @@ export async function requireAuth(request) {
     return null
 }
 
-export function isRentedVanWithinLast30Days(rentedVan) {
+export function formatDate(date) {
+    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    return new Date(date).toLocaleDateString('en-US', options);
+}
+
+export function isWithinLast30Days(obj, dateAttributeName) {
     const currentDate = new Date();
     const last30Days = new Date(currentDate);
     last30Days.setDate(currentDate.getDate() - 30);
 
-    const transactionDate = new Date(rentedVan.placed_date);
+    const objDate = new Date(obj[dateAttributeName]);
 
-    return transactionDate >= last30Days && transactionDate <= currentDate;
+    return objDate >= last30Days && objDate <= currentDate;
 }

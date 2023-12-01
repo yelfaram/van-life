@@ -3,11 +3,11 @@ import { Link, Await, useLoaderData } from "react-router-dom"
 import { BsStarFill } from "react-icons/bs"
 import HostVan from "../../components/Host/HostVan"
 import Loading from "../../components/Loading"
-import { isRentedVanWithinLast30Days } from "../../../utils"
+import { isWithinLast30Days } from "../../../utils"
 
 function Dashboard() {
     // defer promise
-    const { allHostVans, hostRentedVans } = useLoaderData()
+    const { allHostVans, hostRentedVans, hostReviews } = useLoaderData()
 
     function renderHostVansElements(allHostVans) {
         const hostVanElements = allHostVans.map(hostVan => {
@@ -23,7 +23,7 @@ function Dashboard() {
 
     function renderHostIncome(hostRentedVans) {
         const totalIncome  = hostRentedVans
-            .filter(isRentedVanWithinLast30Days)
+            .filter(rentedVan => isWithinLast30Days(rentedVan, "placed_date"))
             .reduce((totalIncome, rentedVan) => totalIncome + rentedVan.total_cost, 0) || 0
 
         return (
@@ -32,6 +32,18 @@ function Dashboard() {
                 <p>Income last <span>30 days</span></p>
                 <h1>${totalIncome}</h1>
             </div>
+        )
+    }
+
+    function renderHostReview(hostReviews) {
+        const overallRating = (hostReviews.reduce((sum, review) => sum + review.rating, 0) / hostReviews.length).toFixed(1)
+
+        return (
+            <>
+                <h2>Review score</h2>
+                <BsStarFill className="star" />
+                <p>{overallRating}<span>/5</span></p>
+            </>
         )
     }
 
@@ -50,9 +62,11 @@ function Dashboard() {
                 </Link>
             </section>
             <section className="dashboard--reviews">
-                <h2>Review score</h2>
-                <BsStarFill className="star" />
-                <p>5.0<span>/5</span></p>
+                <React.Suspense fallback={<Loading />}>
+                    <Await resolve={hostReviews}>
+                        {renderHostReview}
+                    </Await>
+                </React.Suspense>
                 <Link
                     to="reviews"
                 >

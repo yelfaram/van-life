@@ -15,6 +15,7 @@ import { loader as dashboardLoader } from "./pages/Host/Dashboard.loader"
 import Income from "./pages/Host/Income"
 import { loader as incomeLoader } from "./pages/Host/Income.loader"
 import Reviews from "./pages/Host/Reviews"
+import { loader as reviewsLoader } from "./pages/Host/Reviews.loader"
 import HostVans from "./pages/Host/HostVans"
 import { loader as hostVansLoader } from "./pages/Host/HostVans.loader"
 import HostVanDetail from "./pages/Host/HostVanDetail"
@@ -92,7 +93,8 @@ const router = createBrowserRouter(
                 <Route 
                     path="reviews" 
                     element={<Reviews />}
-                    loader={async ({ request }) => await requireAuth(request)}
+                    loader={reviewsLoader}
+                    errorElement={<Error />}  
                 />
                 <Route 
                     path="vans/:id" 
