@@ -108,6 +108,18 @@ app.get('/rentals', async (req, res) => {
   }
 })
 
+app.post('/rentals/review', async (req, res) => {
+  const { email, vanId, rating, description } = req.body;
+
+  try {
+    const msg = await vanLife.insertReview(email, vanId, rating, description);
+    res.json({ success: true, message: msg })
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+})
+
 // ROUTES - VANS
 app.get('/vans', async (req, res) => {
   try {

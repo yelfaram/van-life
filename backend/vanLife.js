@@ -257,7 +257,7 @@ export const getUserRentals = async (email) => {
     try {
         return await new Promise((resolve, reject) => {
             connection.query(
-                `SELECT v.van_id, v.name, v.image_url, v.type, r.total_cost, r.start_date, r.end_date
+                `SELECT r.rental_id, r.email, v.van_id, v.name, v.image_url, v.type, r.total_cost, r.start_date, r.end_date
                 FROM rental r 
                 JOIN van v on r.van_id = v.van_id
                 WHERE email = $1`,
@@ -341,6 +341,28 @@ export const insertRental = async (vanId, email, totalCost, startDate, endDate) 
                     }
                 }
             ) 
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
+export const insertReview = async (email, vanId, rating, description) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                "INSERT INTO review (email, van_id, rating, description) VALUES ($1, $2, $3, $4) RETURNING *",
+                [email, vanId, rating, description],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve(`Review added for User with email: ${results.rows[0].email} for van with ID: ${results.rows[0].van_id}`)
+                    }
+                }
+            )
         })
     } catch (err) {
         console.error(err);

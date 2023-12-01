@@ -1252,3 +1252,117 @@ footer {
   font-weight: 700;
   margin-top: 25px;
 }
+
+/* RENTALS */
+.rentals--container {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  margin-bottom: 60px;
+}
+
+/* RENTAL */
+
+.rental-container {
+  border-radius: 6px;
+  background-color: #FFF;
+  padding: 10px 30px;
+  margin-bottom: 15px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.rental--img {
+  width: 200px;
+  height: 200px;
+  border-radius: 5px;
+  object-fit: cover;
+  margin-right: 30px;
+}
+
+.rental-van--info {
+  margin-right: auto;
+}
+
+.rental--type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  width: 110px;
+
+  color: #FFEAD0;
+  font-family: Inter;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.rental--name {
+  color: #161616;
+  font-size: 1.5rem;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.rental--cost {
+  color: #4D4D4D;
+  font-size: 1.2rem;
+}
+
+.rental--review {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background-color: #FFF;
+  color: #161616;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+}
+
+.rental--review:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* REVIEW FORM */
+.review-form--container {
+  border-radius: 6px;
+  background-color: #FFF;
+  padding: 30px;
+  margin-bottom: 15px;
+  width: 500px;
+}
+
+.review--form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.review--form > textarea {
+  margin-bottom: 15px;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  border-radius: 5px;
+  font-size: 1rem;
+  padding: 10px;
+  width: 100%;
+}
+
+.review--form > button {
+  background-color: #4D4D4D;
+  color: #FFF;
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  border-radius: 5px;
+  font-size: 1rem;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+}

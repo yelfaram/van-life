@@ -54,12 +54,12 @@ CREATE TABLE IF NOT EXISTS rental (
 );
 
 CREATE TABLE IF NOT EXISTS review (
-  renter_email VARCHAR( 255 ) NOT NULL,
+  email VARCHAR( 255 ) NOT NULL,
   van_id INT NOT NULL,
-  rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
   date TIMESTAMP NOT NULL DEFAULT NOW(),
-  text TEXT NOT NULL,
-  PRIMARY KEY (renter_email, van_id),
+  rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  description TEXT NOT NULL,
+  PRIMARY KEY (email, van_id, date),
   FOREIGN KEY (van_id)
     REFERENCES van (van_id)
 );

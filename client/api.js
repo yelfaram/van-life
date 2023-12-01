@@ -161,3 +161,25 @@ export async function rentVan(id, totalCost, startDate, endDate) {
     }
     return data
 }
+
+export async function postUserReview(email, vanId, rating, description) {
+    const res = await fetch(`http://localhost:3000/rentals/review`, 
+        {
+            method: 'POST',
+            body: JSON.stringify({ email, vanId, rating, description }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+    )
+    const data = await res.json();
+    if (!res.ok) {
+        throw {
+            message: data.message,
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+    return data
+
+}

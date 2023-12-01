@@ -1,17 +1,20 @@
 import React from "react"
 import { Await, useLoaderData } from "react-router-dom"
 import Loading from "../components/Loading"
+import Rental from "../components/Rentals/Rental"
 
 function Rentals() {
     // defer promise
     const { rentals } = useLoaderData()
 
     function renderRentalsElements(rentals) {
-        console.log(rentals)
+        const rentalElements = rentals.map(rental => {
+            return <Rental key={rental.rental_id} {...rental} />
+        })
 
         return (
-            <div>
-                Rental page here
+            <div className="rentals--container">
+                {rentalElements}
             </div>
         )
     }
