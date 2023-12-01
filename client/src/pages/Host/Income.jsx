@@ -28,7 +28,6 @@ function Income() {
     const { hostRentedVans } = useLoaderData()
 
     function renderHostIncomeElements(hostRentedVans) {
-        console.log(hostRentedVans)
         // get last 30 day rental transactions
         const rentalsWithinLast30Days = hostRentedVans.filter(isRentedVanWithinLast30Days)
         const totalIncome = rentalsWithinLast30Days.reduce((totalIncome, rentedVan) => totalIncome + rentedVan.total_cost, 0) || 0
