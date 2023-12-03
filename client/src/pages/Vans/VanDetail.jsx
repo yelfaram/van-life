@@ -67,6 +67,7 @@ function VanDetail() {
         const button = (
             <button 
                 className={`van-detail--rent ${(!loggedIn || !startDate || !endDate) && 'disabled'}`}
+                disabled={!loggedIn || !startDate || !endDate}
                 onClick={() => handleRentVan(vanId, price)}
             >
                 Rent this van
