@@ -63,24 +63,24 @@ function Register() {
                 <div className="register--names">
                     <input 
                         type="text"
-                        {...register("firstName", { required: "First name is required" })}
+                        {...register("firstName", { required: "Please provide a first name" })}
                         placeholder="First name"
                     />
                     <input 
                         type="text"
-                        {...register("lastName", { required: "Last name is required" })}
+                        {...register("lastName", { required: "Please provide a last name" })}
                         placeholder="Last name"
                     />
                 </div>
                 <input 
                     type="email"
-                    {...register("email", { required: "Email is required" })}
+                    {...register("email", { required: "Please provide an email" })}
                     placeholder="Email address"
                 />
                 <div className="register--passwords">
                     <input 
                         type="password"
-                        {...register("password", { required: "Password is required" })}
+                        {...register("password", { required: "Please provide a password" })}
                         placeholder="Password"
                     />
                     <input 
@@ -98,7 +98,7 @@ function Register() {
                         Host
                         <input
                         type="radio"
-                        {...register("userType", { required: "User type is required" })}
+                        {...register("userType", { required: "Please select a user type" })}
                         value="host"
                         />
                     </label>
@@ -106,7 +106,7 @@ function Register() {
                         Renter
                         <input
                         type="radio"
-                        {...register('userType', { required: "User type is required"  })}
+                        {...register('userType', { required: "Please select a user type"  })}
                         value="renter"
                         />
                     </label>

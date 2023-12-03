@@ -65,12 +65,12 @@ function Login() {
             >
                 <input 
                     type="email"
-                    {...register("email", { required: "Email is required" })}
+                    {...register("email", { required: "Please provide your email" })}
                     placeholder="Email address"
                 />
                 <input 
                     type="password"
-                    {...register("password", { required: "Password is required" })}
+                    {...register("password", { required: "Please provide your password" })}
                     placeholder="Password"
                 />
                 <div className="login--types">
@@ -78,7 +78,7 @@ function Login() {
                         Host
                         <input
                         type="radio"
-                        {...register("userType", { required: "User type is required" })}
+                        {...register("userType", { required: "Please select a user type" })}
                         value="host"
                         />
                     </label>
@@ -86,7 +86,7 @@ function Login() {
                         Renter
                         <input
                         type="radio"
-                        {...register('userType', { required: "User type is required" })}
+                        {...register('userType', { required: "Please select a user type" })}
                         value="renter"
                         />
                     </label>
