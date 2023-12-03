@@ -1,11 +1,17 @@
-import React from "react"
+import React, { useState } from "react"
 import { useLoaderData, Await } from "react-router-dom"
 import HostVan from "../../components/Host/HostVan"
 import Loading from "../../components/Loading"
+import Modal from "../../components/Host/Add/Modal"
 
 function HostVans() {
     // defer promise
     const { allHostVans } = useLoaderData()
+
+    // for modal add form
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     function renderHostVansElements(allHostVans) {
         const hostVanElements = allHostVans.map(hostVan => {
@@ -27,6 +33,11 @@ function HostVans() {
                     {renderHostVansElements}
                 </Await>
             </React.Suspense>
+            
+            <div className="host-vans--btn">
+                <button className="host-vans--add" onClick={handleOpen}>Add van</button>
+                <Modal open={open} handleClose={handleClose} />
+            </div>
         </div>
     )
 }

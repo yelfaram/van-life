@@ -805,35 +805,61 @@ footer {
   grid-template-rows: auto;
   justify-items: center;
   padding: 30px;
+  padding-bottom: 0;
+}
 
+.host-vans--btn {
+  padding: 30px;
+}
+
+.host-vans--add {
+  border-radius: 10px;
+  background-color: #161616;
+  border: none;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform .1s ease-in-out;
+
+  color: #FFF;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 700;
+
+  width: 100%;
+  height: 55px;
   margin-bottom: 55px;
 }
 
-/* HOST VAN */
-.host-van--link {
-  text-decoration: none;
-
-  display: flex;
-  align-items: center;
+.host-vans--add:hover {
+  transform: translate(1px, 1px);
 }
 
+/* HOST VAN */
 .host-van--container {
   border-radius: 6px;
   background-color: #FFF;
   padding: 20px;
   margin-bottom: 15px;
   width: 100%;
+
+  display: flex;
+  align-items: center;
+}
+
+.host-van--link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  width: 70%;
+  margin-right: auto;
 }
 
 .host-van--img {
   width: 150px;
   height: 150px;
   border-radius: 5px;
+  margin-right: 20px;
   object-fit: cover;
-}
-
-.host-van--info {
-  padding: 20px;
 }
 
 .host-van--name {
@@ -844,6 +870,24 @@ footer {
 .host-van--price {
   color: #4D4D4D;
   font-size: 1.2rem;
+}
+
+.host-van--edit-btn,
+.host-van--delete-btn {
+  background-color: #4D4D4D;
+  color: #FFF;
+  border: none;
+  padding: 5px;
+  font-size: 1.2rem;
+  margin-left: 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.host-van--edit-btn:hover,
+.host-van--delete-btn:hover {
+  background-color: #161616; /* Darker color on hover */
 }
 
 /* HOST VAN DETAIL */
@@ -1333,7 +1377,6 @@ footer {
   border-radius: 6px;
   background-color: #FFF;
   padding: 30px;
-  margin-bottom: 15px;
   width: 500px;
 }
 
@@ -1365,4 +1408,109 @@ footer {
   padding: 10px;
   cursor: pointer;
   width: 100%;
+}
+
+/* ADD FORM && EDIT FORM */
+.add-form--container,
+.edit-form--container {
+  border-radius: 6px;
+  background-color: #FFF;
+  padding: 30px;
+  width: 600px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.add--form, 
+.edit--form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.add--form select,
+.add--form input,
+.edit--form select,
+.edit--form input {
+  border: 1px solid rgba(209, 213, 219);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  height: 45px;
+
+  text-indent: 15px;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.add--form select,
+.edit--form select {
+  appearance: none;
+  border-radius: 0;
+  border-bottom: none;
+}
+
+.add--form select:focus,
+.add--form input:focus,
+.edit--form select:focus,
+.edit--form input:focus {
+  outline: none;
+}
+
+.add--form input:first-of-type,
+.edit--form input:first-of-type {
+  border-radius: 6px 6px 0 0;
+  border-bottom: none;
+}
+
+.add--form input:nth-of-type(2),
+.edit--form input:nth-of-type(2) {
+  border-bottom: none;
+}
+
+.add--form input:last-of-type,
+.edit--form input:last-of-type {
+  border-radius: 0 0 6px 6px;
+  border-top: none;
+}
+
+.add--form textarea,
+.edit--form textarea {
+  border: 1px solid rgba(209, 213, 219);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  resize: vertical; 
+  padding-left: 15px;
+  padding-top: 10px;
+}
+
+.add--form textarea:focus,
+.edit--form textarea:focus {
+  outline: none;
+}
+
+.add--form > button,
+.edit--form > button {
+  margin-top: 25px;
+  border-radius: 6px;
+  background-color: #4D4D4D;
+  border: none;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform .1s ease-in-out;
+
+  color: #FFF;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 700;
+
+  height: 40px;
+}
+
+.add--form > button:hover,
+.edit--form > button:hover {
+  transform: translate(1px, 1px);
 }
