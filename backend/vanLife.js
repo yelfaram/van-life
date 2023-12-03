@@ -178,6 +178,30 @@ export const getVanById = async (vanId) => {
     }
 }
 
+export const getVanByName = async (name) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                "SELECT * FROM van WHERE name = $1", 
+                [name],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve({ van: results.rows[0] });
+                    } else {
+                        resolve({ van: null });
+                    }
+                }
+            );
+        });
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
 export const getHostVans = async (hostId) => {
     try {
         return await new Promise((resolve, reject) => {
@@ -396,6 +420,54 @@ export const insertReview = async (email, vanId, rating, description) => {
                 }
             )
         })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
+export const insertVan = async (hostId, name, type, price, description, imageURL) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                "INSERT INTO van (owner_id, name, price, description, image_url, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+                [hostId, name, price, description, imageURL, type],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve(`Van added with ID ${results.rows[0].van_id}`)
+                    }
+                }
+            )
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
+// DELETES
+
+export const deleteVan = async (vanId) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                "DELETE FROM van WHERE van_id = $1",
+                [vanId],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results.rowCount > 0) {
+                        resolve(`Van ${vanId} was successfully deleted`);
+                    } else {
+                        reject(new Error(`Van with ID ${vanId} not found`));
+                    }
+                }
+            )
+        })        
     } catch (err) {
         console.error(err);
         throw new Error(err.message);

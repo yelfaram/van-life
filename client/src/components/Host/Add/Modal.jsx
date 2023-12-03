@@ -5,7 +5,7 @@ import AddForm from "./AddForm";
 function Modal(props) {
     return (
         <Dialog open={props.open} onClose={props.handleClose}>
-            <AddForm />
+            <AddForm handleClose={props.handleClose}/>
         </Dialog>
     )
 }

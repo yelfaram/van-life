@@ -5,7 +5,7 @@ import ReviewForm from "./ReviewForm";
 function Modal(props) {
     return (
         <Dialog open={props.open} onClose={props.handleClose}>
-            <ReviewForm vanId={props.vanId} email={props.email}/>
+            <ReviewForm vanId={props.vanId} email={props.email} handleClose={props.handleClose}/>
         </Dialog>
     )
 }

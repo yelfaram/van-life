@@ -156,7 +156,7 @@ export async function logoutUser() {
 }
 
 export async function rentVan(id, totalCost, startDate, endDate) {
-    const res = await fetch(`http://localhost:3000/vans/${id.toString()}/rent`,
+    const res = await fetch(`http://localhost:3000/vans/${id}/rent`,
         {
             method: 'POST',
             body: JSON.stringify({ totalCost, startDate, endDate }),
@@ -196,5 +196,46 @@ export async function postUserReview(email, vanId, rating, description) {
         }
     }
     return data
+}
 
+export async function addVan(name, type, price, description, imageURL) {
+    const res = await fetch(`http://localhost:3000/host/vans`, 
+        {
+            method: 'POST',
+            body: JSON.stringify({ name, type, price, description, imageURL }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        }
+    )
+    const data = await res.json();
+    if (!res.ok) {
+        throw {
+            message: data.message,
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+    return data
+}
+
+export async function deleteVan(id) {
+    const res = await fetch(`http://localhost:3000/host/vans/${id}`,
+        {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+    )
+    const data = await res.json();
+    if (!res.ok) {
+        throw {
+            message: data.message,
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+    return data 
 }

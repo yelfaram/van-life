@@ -24,11 +24,13 @@ CREATE TABLE IF NOT EXISTS van (
   owner_id INT NOT NULL,
   name VARCHAR( 30 ) UNIQUE NOT NULL,
   price INTEGER NOT NULL,
+  CHECK (price > 0),
   description TEXT NOT NULL,
-  image_url VARCHAR( 255 ) NOT NULL,
+  image_url TEXT NOT NULL,
   type van_types NOT NULL,
   FOREIGN KEY (owner_id)
     REFERENCES owner (owner_id)
+      ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS renter (
@@ -51,6 +53,7 @@ CREATE TABLE IF NOT EXISTS rental (
   end_date TIMESTAMP NOT NULL,
   FOREIGN KEY (van_id)
     REFERENCES van (van_id)
+      ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS review (
@@ -62,6 +65,7 @@ CREATE TABLE IF NOT EXISTS review (
   PRIMARY KEY (email, van_id, date),
   FOREIGN KEY (van_id)
     REFERENCES van (van_id)
+      ON DELETE CASCADE
 );
 
 INSERT INTO 

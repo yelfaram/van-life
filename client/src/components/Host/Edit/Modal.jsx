@@ -12,6 +12,7 @@ function Modal(props) {
                 price={props.price}
                 description={props.description}
                 image_url={props.image_url}
+                handleClose={props.handleClose}
             />
         </Dialog>
     )

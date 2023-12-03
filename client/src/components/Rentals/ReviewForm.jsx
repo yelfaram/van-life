@@ -25,6 +25,8 @@ function ReviewForm(props) {
 
             if (success) {
                 console.log("postUserReview()", message);
+
+                props.handleClose()
             } else {
                 console.error("postUserReview() error", message);
             }
@@ -63,6 +65,7 @@ function ReviewForm(props) {
 ReviewForm.propTypes = {
     vanId: PropTypes.number,
     email: PropTypes.string,
+    handleClose: PropTypes.func,
 }
 
 export default ReviewForm

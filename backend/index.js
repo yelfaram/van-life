@@ -191,6 +191,26 @@ app.get('/host/vans', async (req, res) => {
   }
 })
 
+app.post('/host/vans', async (req, res) => {
+  const hostId = req.session.hostId
+  const { name, type, price, description, imageURL } = req.body
+
+  try {
+    const result = await vanLife.getVanByName(name)
+    const van = result.van;
+    if (van) {
+      res.status(409).json({ success: false, message: 'Van already exists with that name'})
+      return;
+    }
+
+    const msg = await vanLife.insertVan(hostId, name, type, price, description, imageURL)
+    res.json({ success: true, message: msg })
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+})
+
 app.get('/host/vans/rented', async (req, res) => {
   const hostId = req.session.hostId
   try {
@@ -216,6 +236,18 @@ app.get('/host/vans/:id', async (req, res) => {
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: err.message });
+  }
+})
+
+app.delete('/host/vans/:id', async (req, res) => {
+  const vanId = req.params.id
+
+  try {
+    const msg = await vanLife.deleteVan(vanId)
+    res.json({ success: true, message: msg })
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
   }
 })
 

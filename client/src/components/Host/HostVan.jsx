@@ -3,12 +3,30 @@ import { Link } from "react-router-dom"
 import PropTypes from 'prop-types';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Modal from "../../components/Host/Edit/Modal"
+import { deleteVan } from "../../../api"
 
 function HostVan(props) {
     // for modal add form
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    async function handleDeleteVan(vanId) {
+        try {
+            const { success, message } = await deleteVan(vanId)
+
+            if (success) {
+                console.log("handleDeleteVan()", message);
+
+                // Reload the page after a successful deletion
+                window.location.reload()
+            } else {
+                console.error("handleDeleteVan() error", message);
+            }
+        } catch (err) {
+            console.error("Error deleting the van:", err.message)
+        }
+    }
 
     return (
         <div className="host-van--container">
@@ -39,7 +57,7 @@ function HostVan(props) {
                         description={props.description}
                         image_url={props.image_url}
                     />
-                    <button className="host-van--delete-btn" onClick={() => handleVanDelete(props.van_id)}>
+                    <button className="host-van--delete-btn" onClick={() => handleDeleteVan(props.van_id)}>
                         <FaTrash />
                     </button>
                 </div>
