@@ -220,6 +220,27 @@ export async function addVan(name, type, price, description, imageURL) {
     return data
 }
 
+export async function updateVan(id, name, type, price, description, imageURL) {
+    const res = await fetch(`http://localhost:3000/host/vans/${id}`, 
+        {
+            method: 'PUT',
+            body: JSON.stringify({ name, type, price, description, imageURL }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+    )
+    const data = await res.json();
+    if (!res.ok) {
+        throw {
+            message: data.message,
+            statusText: res.statusText,
+            status: res.status
+        }
+    }
+    return data
+}
+
 export async function deleteVan(id) {
     const res = await fetch(`http://localhost:3000/host/vans/${id}`,
         {

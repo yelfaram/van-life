@@ -1514,3 +1514,8 @@ footer {
 .edit--form > button:hover {
   transform: translate(1px, 1px);
 }
+
+.edit--form > button:disabled {
+  background-color: #aaaaaa;
+  cursor: not-allowed;
+}

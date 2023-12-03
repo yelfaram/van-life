@@ -239,6 +239,26 @@ app.get('/host/vans/:id', async (req, res) => {
   }
 })
 
+app.put('/host/vans/:id', async (req, res) => {
+  const vanId = req.params.id
+  const { name, type, price, description, imageURL } = req.body
+
+  try {
+    const result = await vanLife.getVanByName(name)
+    const van = result.van;
+    if (van) {
+      res.status(409).json({ success: false, message: 'Van already exists with that name'})
+      return;
+    }
+
+    const msg = await vanLife.updateVan(vanId, name, type, price, description, imageURL)
+    res.json({ success: true, message: msg })
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+})
+
 app.delete('/host/vans/:id', async (req, res) => {
   const vanId = req.params.id
 

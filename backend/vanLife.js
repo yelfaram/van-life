@@ -448,6 +448,32 @@ export const insertVan = async (hostId, name, type, price, description, imageURL
     }
 }
 
+// UPDATES
+export const updateVan = async (vanId, name, type, price, description, imageURL) => {
+    try {
+        return await new Promise((resolve, reject) => {
+            connection.query(
+                `UPDATE van
+                SET name = $1, price = $2, description = $3, image_url = $4, type = $5
+                WHERE van_id = $6
+                RETURNING van_id`,
+                [name, price, description, imageURL, type, vanId],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    if (results && results.rows.length > 0) {
+                        resolve(`Van updated with ID ${results.rows[0].van_id}`)
+                    }
+                }
+            )
+        })
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
 // DELETES
 
 export const deleteVan = async (vanId) => {
