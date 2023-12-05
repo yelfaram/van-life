@@ -88,6 +88,7 @@ function VanDetail() {
                     selectsStart
                     startDate={startDate}
                     endDate={endDate}
+                    minDate={new Date()} 
                     placeholderText="Start Date"
                     className="van-detail--date-picker"
                 />
@@ -97,7 +98,7 @@ function VanDetail() {
                     selectsEnd
                     startDate={startDate}
                     endDate={endDate}
-                    minDate={startDate}
+                    minDate={startDate || new Date()}
                     placeholderText="End Date"
                     className="van-detail--date-picker"
                 />
