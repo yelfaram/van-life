@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Link, useLocation, useLoaderData, Await } from "react-router-dom"
+import { useNavigate, Link, useLocation, useLoaderData, Await } from "react-router-dom"
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/translucent.css';
@@ -14,6 +14,7 @@ function VanDetail() {
     const { loggedIn } = authData || {};
 
     const { state } = useLocation()
+    const navigate = useNavigate();
     
     // defer promise
     const { van } = useLoaderData()
@@ -37,6 +38,7 @@ function VanDetail() {
             
             if (success) {
                 console.log("handleRentVan()", message);
+                navigate("/rentals")
             } else {
                 console.error("handleRentVan() error", message);
             }
