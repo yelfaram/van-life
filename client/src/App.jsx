@@ -83,6 +83,7 @@ const router = createBrowserRouter(
                     path="income" 
                     element={<Income />}
                     loader={incomeLoader}
+                    errorElement={<Error />}
                 />
                 <Route 
                     path="vans" 

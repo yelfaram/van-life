@@ -12,9 +12,14 @@ function Reviews() {
     const { hostReviews } = useLoaderData()
 
     function renderHostReviewElements(hostReviews) {
-        const overallRating = (hostReviews.reduce((sum, review) => sum + review.rating, 0) / hostReviews.length).toFixed(1)
-        const reviewsWithinLast30Days = hostReviews.filter(review => isWithinLast30Days(review, "date"))
-        const reviewElements = reviewsWithinLast30Days.map(review => <Review key={nanoid()} {...review} />)
+        let overallRating = 0.0
+        let reviewsWithinLast30Days = []
+        let reviewElements = []
+        if (hostReviews) {
+            overallRating = (hostReviews.reduce((sum, review) => sum + review.rating, 0) / hostReviews.length).toFixed(1)
+            const reviewsWithinLast30Days = hostReviews.filter(review => isWithinLast30Days(review, "date"))
+            reviewElements = reviewsWithinLast30Days.map(review => <Review key={nanoid()} {...review} />)
+        }
 
         return (
             <>
@@ -24,7 +29,7 @@ function Reviews() {
                         <BsStarFill className="overall-rating" />
                         <p>overall rating</p>
                     </div>
-                    <RatingProgressBar reviews={hostReviews} />
+                    <RatingProgressBar reviews={hostReviews || []} />
                 </div>
                 <div className="reviews--container">
                     <div>

@@ -1,5 +1,5 @@
 import React from "react"
-import { Await, useLoaderData } from "react-router-dom"
+import { Await, useLoaderData, Link } from "react-router-dom"
 import Loading from "../components/Loading"
 import Rental from "../components/Rentals/Rental"
 
@@ -8,6 +8,17 @@ function Rentals() {
     const { rentals } = useLoaderData()
 
     function renderRentalsElements(rentals) {
+        if (!rentals) {
+            return (
+                <div className="rentals--no-vans-container">
+                    <h2>You have no rented vans at this time.</h2>
+                    <Link to="/vans" className="link-button">
+                        Explore our vans
+                    </Link>
+                </div>
+            )
+        }
+
         const rentalElements = rentals.map(rental => {
             return <Rental key={rental.rental_id} {...rental} />
         })

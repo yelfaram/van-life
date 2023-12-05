@@ -116,7 +116,7 @@ function EditForm(props) {
                     className={`edit--btn ${!isDirty && 'disabled'}`} 
                     disabled={!isDirty}
                 >
-                    Edit
+                    Update
                 </button>
             </form>
         </div>

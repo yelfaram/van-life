@@ -2,9 +2,13 @@ import PropTypes from 'prop-types';
 function RatingProgressBar({ reviews }) {
 
     function calculatePercentage(rating) {
-        const totalRatings = reviews.length
-        const ratingCount = reviews.filter(review => review.rating === rating).length
+        const totalRatings = reviews ? reviews.length : 0
 
+        if (totalRatings === 0) {
+            return 0;
+        }
+
+        const ratingCount = reviews.filter(review => review.rating === rating).length;
         return Math.floor((ratingCount / totalRatings) * 100)
     }
 

@@ -1,30 +1,59 @@
-import { query } from "express";
+import { hash, compare } from 'bcrypt';
 import connection from "./db/connection.js";
 
-export const authenticateUser = async (email, password, userType) => {
-    let query = "SELECT owner_id FROM owner WHERE email = $1 AND password = $2"
+const handleQueryResults = (resolve, reject, error, results, key, operation, fetchOne) => {
+    if (error) {
+        reject(error);
+    } else {
+        if (operation === "insert" || operation === "update" || operation === "delete") {
+            // For inserts, updates and deletes, resolve with a success message
+            const response = `${operation} successful for ${key}`
+            resolve(response);
+        } else {
+            // For selects, resolve with the data
+            const data = results.rows;
 
-    if (userType === "renter") {
-        query = "SELECT renter_id FROM renter WHERE email = $1 AND password = $2";
+            if (data && data.length > 0) {
+                const response = { [key]: fetchOne ? data[0] : data };
+                resolve(response);
+            } else {
+                const response = { [key]: null };
+                resolve(response);
+            }
+        }
     }
+};
 
+const executeQuery = async (query, values, key, operation = "select", fetchOne = false) => {
+    const client = await connection.connect();
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                query,
-                [email, password],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ user: results.rows[0]});
-                    } else {
-                        resolve({ user: null });
-                    }
-                }
-            );
+        const results = await client.query(query, values);
+        return new Promise((resolve, reject) => {
+            handleQueryResults(resolve, reject, null, results, key, operation, fetchOne);
         });
+    } catch (err) {
+        console.error(err);
+        return new Promise((resolve, reject) => {
+            handleQueryResults(resolve, reject, err, null, key, operation, fetchOne);
+        });
+    } finally {
+        client.release();
+    }
+};
+
+export const authenticateUser = async (email, password, userType) => {
+    const query = userType === "renter"
+        ? "SELECT renter_id, password FROM renter WHERE email = $1"
+        : "SELECT owner_id, password FROM owner WHERE email = $1";
+    try {
+        const result = await executeQuery(query, [email], "user", "select", true);
+        if (result && result.user) {
+            const isPasswordValid = await compare(password, result.user.password);
+
+            return isPasswordValid ? result : { user: null };
+        }
+
+        return { user: null };
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -32,23 +61,10 @@ export const authenticateUser = async (email, password, userType) => {
 }
 
 export const getHostById = async (hostId) => {
+    const query = "SELECT email, first_name, last_name FROM owner WHERE owner_id = $1"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "SELECT email, first_name, last_name FROM owner WHERE owner_id = $1",
-                [hostId],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ user: results.rows[0]});
-                    } else {
-                        resolve({ user: null });
-                    }
-                }
-            )
-        })
+        const result = await executeQuery(query, [hostId], "user", "select", true)
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -56,23 +72,10 @@ export const getHostById = async (hostId) => {
 }
 
 export const getRenterById = async (renterId) => {
+    const query = "SELECT email, first_name, last_name FROM renter WHERE renter_id = $1"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "SELECT email, first_name, last_name FROM renter WHERE renter_id = $1",
-                [renterId],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ user: results.rows[0]});
-                    } else {
-                        resolve({ user: null });
-                    }
-                }
-            )
-        })
+        const result = await executeQuery(query, [renterId], "user", "select", true)
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -80,19 +83,10 @@ export const getRenterById = async (renterId) => {
 }
 
 export const getVans = async () => {
+    const query = "SELECT * FROM van"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query("SELECT * FROM van", (error, results) => {
-                if (error) {
-                    reject(error);
-                }
-                if (results && results.rows.length > 0) {
-                    resolve({ vans: results.rows });
-                } else {
-                    resolve({ vans: null })
-                }
-            });
-        });
+        const result = await executeQuery(query, [], "vans")
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -100,26 +94,15 @@ export const getVans = async () => {
 }
 
 export const getAvailableVansForHost = async (hostId) => {
+    const query = `
+            SELECT v.van_id, v.owner_id, v.name, v.price, v.description, v.image_url, v.type
+            FROM van v
+            JOIN owner o ON v.owner_id = o.owner_id
+            WHERE v.owner_id != $1
+        `
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                `SELECT v.van_id, v.owner_id, v.name, v.price, v.description, v.image_url, v.type
-                FROM van v
-                JOIN owner o ON v.owner_id = o.owner_id
-                WHERE v.owner_id != $1`,
-                [hostId],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ vans: results.rows });
-                    } else {
-                        resolve({ vans: null })
-                    }
-                }
-            )
-        })
+        const result = await executeQuery(query, [hostId], "vans")
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -127,27 +110,17 @@ export const getAvailableVansForHost = async (hostId) => {
 }
 
 export const getAvaliableVansForRenter = async () => {
-    try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                `SELECT v.van_id, v.owner_id, v.name, v.price, v.description, v.image_url, v.type
-                FROM van v
-                WHERE v.van_id NOT IN (SELECT r.van_id
-                    FROM rental r
-                    WHERE NOW() BETWEEN r.start_date AND r.end_date
-                )`,
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ vans: results.rows });
-                    } else {
-                        resolve({ vans: null })
-                    }
-                }
+    const query = `
+            SELECT v.van_id, v.owner_id, v.name, v.price, v.description, v.image_url, v.type
+            FROM van v
+            WHERE v.van_id NOT IN (SELECT r.van_id
+                FROM rental r
+                WHERE NOW() BETWEEN r.start_date AND r.end_date
             )
-        })
+        `
+    try {
+        const result = await executeQuery(query, [], "vans")
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -155,23 +128,10 @@ export const getAvaliableVansForRenter = async () => {
 }
 
 export const getVanById = async (vanId) => {
+    const query = "SELECT * FROM van WHERE van_id = $1"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "SELECT * FROM van WHERE van_id = $1", 
-                [vanId],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ van: results.rows[0] });
-                    } else {
-                        resolve({ van: null });
-                    }
-                }
-            );
-        });
+        const result = await executeQuery(query, [vanId], "van", "select", true)
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -179,23 +139,10 @@ export const getVanById = async (vanId) => {
 }
 
 export const getVanByName = async (name) => {
+    const query = "SELECT * FROM van WHERE name = $1"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "SELECT * FROM van WHERE name = $1", 
-                [name],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ van: results.rows[0] });
-                    } else {
-                        resolve({ van: null });
-                    }
-                }
-            );
-        });
+        const result = await executeQuery(query, [name], "van", "select", true)
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -203,23 +150,10 @@ export const getVanByName = async (name) => {
 }
 
 export const getHostVans = async (hostId) => {
+    const query = "SELECT * FROM van WHERE owner_id = $1"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "SELECT * FROM van WHERE owner_id = $1",
-                [hostId],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ hostVans: results.rows });
-                    } else {
-                        resolve({ hostVans: null })
-                    }
-                }
-            )
-        });
+        const result = await executeQuery(query, [hostId], "hostVans")
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -227,23 +161,10 @@ export const getHostVans = async (hostId) => {
 }
 
 export const getHostVanById = async (hostId, vanId) => {
+    const query = "SELECT * FROM van WHERE owner_id = $1 AND van_id = $2"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "SELECT * FROM van WHERE owner_id = $1 AND van_id = $2",
-                [hostId, vanId],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ hostVan: results.rows[0] });
-                    } else {
-                        resolve({ hostVan: null })
-                    }
-                }
-            )
-        })
+        const result = await executeQuery(query, [hostId, vanId], "hostVan", "select", true)
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -251,26 +172,15 @@ export const getHostVanById = async (hostId, vanId) => {
 }
 
 export const getHostRentedVans = async (hostId) => {
+    const query = `
+            SELECT r.rental_id, r.van_id, r.total_cost, r.placed_date, r.start_date, r.end_date 
+            FROM rental r
+            JOIN van v ON r.van_id = v.van_id
+            WHERE v.owner_id = $1
+        `
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                `SELECT r.rental_id, r.van_id, r.total_cost, r.placed_date, r.start_date, r.end_date 
-                FROM rental r
-                JOIN van v ON r.van_id = v.van_id
-                WHERE v.owner_id = $1`,
-                [hostId],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ hostRentedVans: results.rows })
-                    } else {
-                        resolve({ hostRentedVans: null })
-                    }
-                }
-            )
-        })
+        const result = await executeQuery(query, [hostId], "hostRentedVans")
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -278,31 +188,20 @@ export const getHostRentedVans = async (hostId) => {
 }
 
 export const getHostReviews = async (hostId) => {
+    const query = `
+            SELECT r.van_id, r.date, u.first_name, u.last_name, r.rating, r.description 
+            FROM review r
+            JOIN (
+                SELECT email, first_name, last_name FROM renter
+                UNION
+                SELECT email, first_name, last_name FROM owner
+            ) u ON r.email = u.email
+            JOIN van v ON r.van_id = v.van_id
+            WHERE v.owner_id = $1
+        `
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                `SELECT r.van_id, r.date, u.first_name, u.last_name, r.rating, r.description 
-                FROM review r
-                JOIN (
-                    SELECT email, first_name, last_name FROM renter
-                    UNION
-                    SELECT email, first_name, last_name FROM owner
-                ) u ON r.email = u.email
-                JOIN van v ON r.van_id = v.van_id
-                WHERE v.owner_id = $1`,
-                [hostId],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ hostReviews: results.rows })
-                    } else {
-                        resolve({ hostReviews: null })
-                    }
-                }
-            )
-        })
+        const result = await executeQuery(query, [hostId], "hostReviews")
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -310,26 +209,15 @@ export const getHostReviews = async (hostId) => {
 }
 
 export const getUserRentals = async (email) => {
+    const query = `
+            SELECT r.rental_id, r.email, v.van_id, v.name, v.image_url, v.type, r.total_cost, r.start_date, r.end_date
+            FROM rental r 
+            JOIN van v on r.van_id = v.van_id
+            WHERE email = $1
+        `
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                `SELECT r.rental_id, r.email, v.van_id, v.name, v.image_url, v.type, r.total_cost, r.start_date, r.end_date
-                FROM rental r 
-                JOIN van v on r.van_id = v.van_id
-                WHERE email = $1`,
-                [email],
-                (error, results) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve({ rentals: results.rows })
-                    } else {
-                        resolve({ rentals: null })
-                    }
-                }
-            )
-        })
+        const result = await executeQuery(query, [email], "rentals")
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -339,21 +227,11 @@ export const getUserRentals = async (email) => {
 // INSERTS
 
 export const insertOwner = async (email, password, firstName, lastName) => {
+    const query = "INSERT INTO owner (email, password, first_name, last_name) VALUES ($1, $2, $3, $4)"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "INSERT INTO owner (email, password, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING *",
-                [email, password, firstName, lastName],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve(`Host added with ID: ${results.rows[0].owner_id}`)
-                    }
-                }
-            )
-        })
+        const hashedPassword = await hash(password, 10);
+        const result = await executeQuery(query, [email, hashedPassword, firstName, lastName], "host", "insert");
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -361,21 +239,11 @@ export const insertOwner = async (email, password, firstName, lastName) => {
 }
 
 export const insertRenter = async (email, password, firstName, lastName) => {
+    const query = "INSERT INTO renter (email, password, first_name, last_name) VALUES ($1, $2, $3, $4)"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "INSERT INTO renter (email, password, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING *",
-                [email, password, firstName, lastName],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve(`Renter added with ID: ${results.rows[0].renter_id}`)
-                    }
-                }
-            )
-        })
+        const hashedPassword = await hash(password, 10);
+        const result = await executeQuery(query, [email, hashedPassword, firstName, lastName], "renter", "insert");
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -383,21 +251,10 @@ export const insertRenter = async (email, password, firstName, lastName) => {
 }
 
 export const insertRental = async (vanId, email, totalCost, startDate, endDate) => {
+    const query = "INSERT INTO rental (van_id, email, total_cost, start_date, end_date) VALUES ($1, $2, $3, $4, $5)"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "INSERT INTO rental (van_id, email, total_cost, start_date, end_date) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-                [vanId, email, totalCost, startDate, endDate],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve(`Rental added with ID: ${results.rows[0].rental_id} for User with email: ${email}`)
-                    }
-                }
-            ) 
-        })
+        const result = await executeQuery(query, [vanId, email, totalCost, startDate, endDate], "rental", "insert");
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -405,21 +262,11 @@ export const insertRental = async (vanId, email, totalCost, startDate, endDate) 
 }
 
 export const insertReview = async (email, vanId, rating, description) => {
+    const query = "INSERT INTO review (email, van_id, rating, description) VALUES ($1, $2, $3, $4)"
+
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "INSERT INTO review (email, van_id, rating, description) VALUES ($1, $2, $3, $4) RETURNING *",
-                [email, vanId, rating, description],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve(`Review added for User with email: ${results.rows[0].email} for van with ID: ${results.rows[0].van_id}`)
-                    }
-                }
-            )
-        })
+        const result = await executeQuery(query, [email, vanId, rating, description], "review", "insert");
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -427,21 +274,11 @@ export const insertReview = async (email, vanId, rating, description) => {
 }
 
 export const insertVan = async (hostId, name, type, price, description, imageURL) => {
+    const query = "INSERT INTO van (owner_id, name, price, description, image_url, type) VALUES ($1, $2, $3, $4, $5, $6)"
+    
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "INSERT INTO van (owner_id, name, price, description, image_url, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-                [hostId, name, price, description, imageURL, type],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve(`Van added with ID ${results.rows[0].van_id}`)
-                    }
-                }
-            )
-        })
+        const result = await executeQuery(query, [hostId, name, price, description, imageURL, type], "van", "insert");
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -450,24 +287,16 @@ export const insertVan = async (hostId, name, type, price, description, imageURL
 
 // UPDATES
 export const updateVan = async (vanId, name, type, price, description, imageURL) => {
+    const query = `
+            UPDATE van
+            SET name = $1, price = $2, description = $3, image_url = $4, type = $5
+            WHERE van_id = $6
+            RETURNING van_id
+        `
+    
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                `UPDATE van
-                SET name = $1, price = $2, description = $3, image_url = $4, type = $5
-                WHERE van_id = $6
-                RETURNING van_id`,
-                [name, price, description, imageURL, type, vanId],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results && results.rows.length > 0) {
-                        resolve(`Van updated with ID ${results.rows[0].van_id}`)
-                    }
-                }
-            )
-        })
+        const result = await executeQuery(query, [name, price, description, imageURL, type, vanId], "van", "update");
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);
@@ -477,23 +306,10 @@ export const updateVan = async (vanId, name, type, price, description, imageURL)
 // DELETES
 
 export const deleteVan = async (vanId) => {
+    const query = "DELETE FROM van WHERE van_id = $1"
     try {
-        return await new Promise((resolve, reject) => {
-            connection.query(
-                "DELETE FROM van WHERE van_id = $1",
-                [vanId],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    if (results.rowCount > 0) {
-                        resolve(`Van ${vanId} was successfully deleted`);
-                    } else {
-                        reject(new Error(`Van with ID ${vanId} not found`));
-                    }
-                }
-            )
-        })        
+        const result = await executeQuery(query, [vanId], "van", "delete");
+        return result
     } catch (err) {
         console.error(err);
         throw new Error(err.message);

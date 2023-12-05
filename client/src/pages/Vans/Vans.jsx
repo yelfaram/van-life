@@ -1,5 +1,5 @@
 import React from "react"
-import { useLoaderData, useSearchParams, Await } from "react-router-dom";
+import { useLoaderData, useSearchParams, Await, Link } from "react-router-dom";
 import Van from "../../components/Vans/Van"
 import Loading from "../../components/Loading"
 
@@ -19,12 +19,24 @@ function Vans() {
     const { allVans } = useLoaderData()
 
     function renderVansElements(allVans) {
+        if (!allVans) {
+            return (
+                <div className="no-vans--container">
+                    <h2>There are currently no listed vans.</h2>
+                    <Link to="/login" className="link-button">
+                        If you have any van you would like to list, please login as a host and do so!
+                    </Link>
+                </div>
+            )
+        }
+
         const filteredVans = typeFilter ? allVans.filter(van => van.type === typeFilter) : allVans
         const vanElements = filteredVans.map(van => {
             return <Van key={van.van_id} {...van} searchParams={`?${searchParams.toString()}`} typeFilter={typeFilter}/>
         })
         return (
             <>
+                <h1 className="vans--header">Explore our van options</h1>
                 <div className="vans--filter">
                     <button 
                         onClick={() => handleFilterChange("type", "simple")}
@@ -60,7 +72,6 @@ function Vans() {
 
     return (
         <div>
-            <h1 className="vans--header">Explore our van options</h1>
             <React.Suspense fallback={<Loading />}>
                 <Await resolve={allVans}>
                     {renderVansElements}

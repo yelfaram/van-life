@@ -290,10 +290,10 @@ app.listen(PORT, () => {
 });
 
 //test connection
-connection.connect(err => {
-  if (err) {
-    console.log(err);
-    return;
-  }
-  console.log('Connected to the database');
-});
+// connection.connect(err => {
+//   if (err) {
+//     console.log(err);
+//     return;
+//   }
+//   console.log('Connected to the database');
+// });

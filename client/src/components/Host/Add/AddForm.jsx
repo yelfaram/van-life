@@ -52,7 +52,7 @@ function AddForm(props) {
                     placeholder="Name"
                 />
                 <select {...register("type", { required: "Please select the type of van" })}>
-                    <option value="" disabled selected hidden>Select Van Type</option>
+                    <option value="" disabled hidden>Select Van Type</option>
                     <option value="simple">Simple</option>
                     <option value="rugged">Rugged</option>
                     <option value="luxury">Luxury</option>

@@ -10,6 +10,17 @@ function Dashboard() {
     const { allHostVans, hostRentedVans, hostReviews } = useLoaderData()
 
     function renderHostVansElements(allHostVans) {
+        if (!allHostVans) {
+            return (
+                <div className="dashboard--no-vans--container">
+                    <h2>You currently have no vans listings</h2>
+                    <Link to="vans" className="link-button">
+                        Try adding one
+                    </Link>
+                </div>
+            )
+        }
+
         const hostVanElements = allHostVans.map(hostVan => {
             return <HostVan key={hostVan.van_id} {...hostVan} isDashboard={true}/>
         })
@@ -22,9 +33,13 @@ function Dashboard() {
     }
 
     function renderHostIncome(hostRentedVans) {
-        const totalIncome  = hostRentedVans
-            .filter(rentedVan => isWithinLast30Days(rentedVan, "placed_date"))
-            .reduce((totalIncome, rentedVan) => totalIncome + rentedVan.total_cost, 0) || 0
+        const totalIncome = (
+            hostRentedVans && hostRentedVans.length > 0
+                ? hostRentedVans
+                    .filter(rentedVan => isWithinLast30Days(rentedVan, "placed_date"))
+                    .reduce((totalIncome, rentedVan) => totalIncome + rentedVan.total_cost, 0)
+                : 0
+        );
 
         return (
             <div>
@@ -36,7 +51,11 @@ function Dashboard() {
     }
 
     function renderHostReview(hostReviews) {
-        const overallRating = (hostReviews.reduce((sum, review) => sum + review.rating, 0) / hostReviews.length).toFixed(1)
+        const overallRating = (
+            hostReviews && hostReviews.length > 0
+                ? (hostReviews.reduce((sum, review) => sum + review.rating, 0) / hostReviews.length).toFixed(1)
+                : '0.0'
+        );
 
         return (
             <>
@@ -74,7 +93,7 @@ function Dashboard() {
                 </Link>
             </section>
             <section className="dashboard--vans">
-                <div>
+                <div className="dashboard--vans-header">
                     <h2>Your listed vans</h2>
                     <Link
                         to="vans"

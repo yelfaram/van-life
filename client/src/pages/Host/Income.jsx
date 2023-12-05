@@ -28,12 +28,18 @@ function Income() {
     const { hostRentedVans } = useLoaderData()
 
     function renderHostIncomeElements(hostRentedVans) {
-        // get last 30 day rental transactions
-        const rentalsWithinLast30Days = hostRentedVans.filter(rentedVan => isWithinLast30Days(rentedVan, "placed_date"))
-        const totalIncome = rentalsWithinLast30Days.reduce((totalIncome, rentedVan) => totalIncome + rentedVan.total_cost, 0) || 0
-        const transactionElements = rentalsWithinLast30Days.map(rental => <Transaction key={rental.rental_id} {...rental} />)
+        let rentalsWithinLast30Days = []
+        let totalIncome = 0
+        let transactionElements = []
+        if (hostRentedVans) {
+            // get last 30 day rental transactions
+            rentalsWithinLast30Days = hostRentedVans.filter(rentedVan => isWithinLast30Days(rentedVan, "placed_date"))
+            totalIncome = rentalsWithinLast30Days.reduce((totalIncome, rentedVan) => totalIncome + rentedVan.total_cost, 0)
+            transactionElements = rentalsWithinLast30Days.map(rental => <Transaction key={rental.rental_id} {...rental} />)
+        }
+
+        const barGraphData = generateBarGraphData(hostRentedVans || []);
         
-        const barGraphData = generateBarGraphData(hostRentedVans);
         const graphOptions = {
             elements: {
                 bar: {

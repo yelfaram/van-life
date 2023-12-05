@@ -14,20 +14,25 @@ function HostVans() {
     const handleClose = () => setOpen(false);
 
     function renderHostVansElements(allHostVans) {
-        const hostVanElements = allHostVans.map(hostVan => {
-            return <HostVan key={hostVan.van_id} {...hostVan} isDashboard={false}/>
-        })
-
-        return (
-            <div className="host-vans--container">
-                {hostVanElements}
-            </div>
-        )
+        if (allHostVans) {
+            const hostVanElements = allHostVans.map(hostVan => {
+                return <HostVan key={hostVan.van_id} {...hostVan} isDashboard={false}/>
+            })
+    
+            return (
+                <>
+                    <h1 className="host-vans--header">Your listed vans</h1>
+                    <div className="host-vans--container">
+                        {hostVanElements}
+                    </div>
+                </>
+            )
+        }
     }
     
     return (
         <div>
-            <h1 className="host-vans--header">Your listed vans</h1>
+            
             <React.Suspense fallback={<Loading />}>
                 <Await resolve={allHostVans}>
                     {renderHostVansElements}

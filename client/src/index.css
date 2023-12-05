@@ -534,6 +534,27 @@ footer {
 }
 
 /* VANS */
+.no-vans--container {
+  background-color: #FFECBF;
+  color: #161616;
+  border-radius: 5px;
+
+  padding: 35px;
+  margin: 45px 30px; 
+}
+
+.no-vans--container > h2 {
+  margin: 0;
+  padding-bottom: 40px;
+}
+
+.no-vans--container > .link-button {
+  background-color: #161616;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none !important;
+}
+
 
 .vans--container {
   display: grid;
@@ -1079,21 +1100,44 @@ footer {
   font-weight: 500;
 }
 
-.dashboard--vans > div {
+.dashboard--vans > .dashboard--vans-header {
   margin-top: 20px;
   padding: 0 30px;
   display: flex;
   align-items: center;
 }
 
-.dashboard--vans > div > h2 {
+.dashboard--vans > .dashboard--vans-header > h2 {
   margin-right: auto;
 }
 
 .dashboard--vans--container {
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
+  padding: 0 30px;
   margin-bottom: 60px;
+}
+
+.dashboard--no-vans--container {
+  background-color: #FFECBF;
+  color: #161616;
+  border-radius: 5px;
+
+  padding: 35px;
+  margin: 45px 30px; 
+}
+
+.dashboard--no-vans--container > h2 {
+  margin: 0;
+  padding-bottom: 40px;
+}
+
+.dashboard--no-vans--container > .link-button {
+  background-color: #161616;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none !important;
 }
 
 /* TRANSACTION */
@@ -1148,9 +1192,9 @@ footer {
   margin-bottom: 40px;
 }
 
-/* .transactions--container {
-  margin-bottom: 80px;
-} */
+.transactions--container {
+  margin-bottom: 60px;
+}
 
 .transactions--container > div {
   display: flex;
@@ -1303,6 +1347,27 @@ footer {
   flex-direction: column;
   padding: 30px;
   margin-bottom: 60px;
+}
+
+.rentals--no-vans-container {
+  background-color: #FFECBF;
+  color: #161616;
+  border-radius: 5px;
+
+  padding: 35px;
+  margin: 45px 30px; 
+}
+
+.rentals--no-vans-container > h2 {
+  margin: 0;
+  padding-bottom: 40px;
+}
+
+.rentals--no-vans-container > .link-button {
+  background-color: #161616;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none !important;
 }
 
 /* RENTAL */

@@ -10,7 +10,7 @@ DROP INDEX IF EXISTS idx_email_owner;
 CREATE TABLE IF NOT EXISTS owner (
   owner_id serial PRIMARY KEY,
   email VARCHAR ( 255 ) UNIQUE NOT NULL,
-  password VARCHAR ( 50 ) NOT NULL,
+  password VARCHAR ( 255 ) NOT NULL,
   first_name VARCHAR( 30 ) NOT NULL,
   last_name VARCHAR( 30 ) NOT NULL
 );
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS van (
 CREATE TABLE IF NOT EXISTS renter (
   renter_id serial PRIMARY KEY,
   email VARCHAR ( 255 ) UNIQUE NOT NULL,
-  password VARCHAR ( 50 ) NOT NULL,
+  password VARCHAR ( 255 ) NOT NULL,
   first_name VARCHAR( 30 ) NOT NULL,
   last_name VARCHAR( 30 ) NOT NULL
 );
