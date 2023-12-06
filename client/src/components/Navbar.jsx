@@ -4,7 +4,7 @@ import { useAuth } from "../../src/hooks/AuthContext"
 
 function Navbar() {
     const { authData } = useAuth();
-    const { loggedIn } = authData || {};
+    const { loggedIn, userType } = authData || {};
 
     const activeStyles = {
         textDecoration: "underline",
@@ -18,12 +18,14 @@ function Navbar() {
                 <img src={Logo} alt="logo" />
             </NavLink>
             <nav>
-                <NavLink 
-                    to="host"
-                    style={( {isActive} ) => isActive ? activeStyles : null}
-                >
-                    Host
-                </NavLink>
+                {(loggedIn && userType === "host") && (
+                    <NavLink 
+                        to="host"
+                        style={( {isActive} ) => isActive ? activeStyles : null}
+                    >
+                        Host
+                    </NavLink>
+                )}
                 <NavLink 
                     to="vans"
                     style={( {isActive} ) => isActive ? activeStyles : null}

@@ -24,9 +24,6 @@ function Register() {
         
         setLoading(true);
 
-        const defaultPath = userType === "host" ? "/host" : "/"
-        const pathname = new URL(window.location.href).searchParams.get("redirectTo") || defaultPath
-
         try {
             const { success, message } = await registerUser({
                 firstName,
@@ -40,7 +37,7 @@ function Register() {
                 // pass user type here to save globally
                 login(userType) // updates global context state
                 toast.success("Welcome aboard! Your account has been successfully created.")
-                navigate(pathname)
+                navigate("/login")
             } else {
                 console.error(`Registration failed: ${message}`);
             }

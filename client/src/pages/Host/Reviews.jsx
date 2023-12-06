@@ -17,7 +17,7 @@ function Reviews() {
         let reviewElements = []
         if (hostReviews) {
             overallRating = (hostReviews.reduce((sum, review) => sum + review.rating, 0) / hostReviews.length).toFixed(1)
-            const reviewsWithinLast30Days = hostReviews.filter(review => isWithinLast30Days(review, "date"))
+            reviewsWithinLast30Days = hostReviews.filter(review => isWithinLast30Days(review, "date"))
             reviewElements = reviewsWithinLast30Days.map(review => <Review key={nanoid()} {...review} />)
         }
 
