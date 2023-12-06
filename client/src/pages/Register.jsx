@@ -1,13 +1,14 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { registerUser } from "../../api"
 import { useAuth } from "../hooks/AuthContext"
 
 function Register() {
     const navigate = useNavigate();
     const { login } = useAuth();
-    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const {
@@ -38,12 +39,13 @@ function Register() {
             if (success) {
                 // pass user type here to save globally
                 login(userType) // updates global context state
+                toast.success("Welcome aboard! Your account has been successfully created.")
                 navigate(pathname)
             } else {
-                setError(`Registration failed: ${message}`);
+                console.error(`Registration failed: ${message}`);
             }
         } catch (err) {
-            setError(err.message)
+            toast.error(err.message)
         } finally {
             setLoading(false);
         }
@@ -52,10 +54,13 @@ function Register() {
     return (
         <div className="register--container">
             <h1>Create an account</h1>
-            { error && <><h4 className="red">{ error }</h4><br /></>}
-            {Object.keys(errors).map((key) => (
-                <h4 key={key} className="red">{errors[key]?.message}</h4>
-            ))}
+            <ul className="error-list">
+                {Object.keys(errors).map((key) => (
+                    <li key={key} className="error-item">
+                        {errors[key]?.message}
+                    </li>
+                ))}
+            </ul>
             <form 
                 className="register--form"
                 onSubmit={handleSubmit(onSubmit)}

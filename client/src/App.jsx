@@ -33,6 +33,7 @@ import {
     createRoutesFromElements,  
     Route 
 } from "react-router-dom"
+import { ToastContainer } from 'react-toastify';
 import { requireAuth } from "../utils"
 import { AuthProvider } from "../src/hooks/AuthContext"
 
@@ -135,6 +136,7 @@ function App() {
                 router={router}
                 fallbackElement={<div className="loading"><h2>Loading...</h2></div>}
             />
+            <ToastContainer />
         </AuthProvider>
     )
 }

@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { logoutUser } from "../../api"
 import { useAuth } from "../../src/hooks/AuthContext"
@@ -23,12 +22,10 @@ function Logout() {
         }
     }
 
-    useEffect(() => {
-        handleLogout()
-    }, [])
+    handleLogout();
 
-    // nothing to render
-    return null
+    // Nothing to render
+    return null;
 }
 
 export default Logout

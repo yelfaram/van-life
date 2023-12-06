@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { useForm } from "react-hook-form";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { loginUser } from "../../api"
 import { useAuth } from "../hooks/AuthContext"
 
@@ -8,7 +10,6 @@ import { useAuth } from "../hooks/AuthContext"
 function Login() {
     const navigate = useNavigate();
     const { login } = useAuth();
-    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -39,13 +40,14 @@ function Login() {
             if (success) {
                 // pass user type here to save globally
                 login(userType) // updates global context state
+                toast.success("Welcome back! You have successfully logged in.")
                 navigate(pathname) // redirect user back to host or whatever protected page he accessed
             } else {
-                setError(`Login failed: ${message}`)
+                console.error(`Login failed: ${message}`)
                 return new Response(`Login failed: ${message}`, { status: 401 });
             }
         } catch (err) {
-            setError(err.message)
+            toast.error(err.message)
         } finally {
             setLoading(false)
         }
@@ -53,12 +55,17 @@ function Login() {
 
     return (
         <div className="login--container">
-            <h1>Sign in to your account</h1>
-            { message && <><h4 className="red">{ message }</h4><br /></>}
-            {Object.keys(errors).map((key) => (
-                <h4 key={key} className="red">{errors[key]?.message}</h4>
-            ))}
-            { error && <><br /><h4 className="red">{ error }</h4></>}
+            <div className="login--errors">
+                <h1>Sign in to your account</h1>
+                {message && <div className="message">{message}</div>}
+                <ul className="error-list">
+                    {Object.keys(errors).map((key) => (
+                        <li key={key} className="error-item">
+                            {errors[key]?.message}
+                        </li>
+                    ))}
+                </ul>
+            </div>
             <form
                 className="login--form"
                 onSubmit={handleSubmit(onSubmit)}

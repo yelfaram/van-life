@@ -1,11 +1,15 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import PropTypes from 'prop-types';
+import { useNavigate } from "react-router-dom"
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import Modal from "../../components/Host/Edit/Modal"
 import { deleteVan } from "../../../api"
 
 function HostVan(props) {
+    const navigate = useNavigate();
     // for modal add form
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -18,13 +22,14 @@ function HostVan(props) {
             if (success) {
                 console.log("handleDeleteVan()", message);
 
-                // Reload the page after a successful deletion
-                window.location.reload()
+                toast.success("Van successfully deleted.")
+                // Reload the page after a successful insertion
+                navigate(window.location.pathname);
             } else {
                 console.error("handleDeleteVan() error", message);
             }
         } catch (err) {
-            console.error("Error deleting the van:", err.message)
+            toast.error("Error deleting the van:", err.message)
         }
     }
 

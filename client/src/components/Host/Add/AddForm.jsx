@@ -1,10 +1,12 @@
-import { useState } from "react"
 import { useForm } from "react-hook-form";
-import { addVan } from "../../../../api"
+import { useNavigate } from "react-router-dom"
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { addVan } from "../../../../api"
 
 function AddForm(props) {
-    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -23,25 +25,27 @@ function AddForm(props) {
                 console.log("Van successfully inserted", message);
 
                 props.handleClose()
-
+                toast.success("Great news! Your van has been successfully added.")
                 // Reload the page after a successful insertion
-                window.location.reload()
+                navigate(window.location.pathname);
             } else {
-                setError(`Van insert failed: ${message}`);
+                console.error(`Van insert failed: ${message}`);
             }
         } catch (err) {
-            setError(err.message)
+            toast.error(err.message)
         }
     
     }
 
     return (
         <div className="add-form--container">
-            { error && <><h4 className="red">{ error }</h4><br /></>}
-            {Object.keys(errors).map((key) => (
-                <h4 key={key} className="red">{errors[key]?.message}</h4>
-            ))}
-            {errors && Object.keys(errors).length > 0 && <br />}
+            <ul className="error-list">
+                {Object.keys(errors).map((key) => (
+                    <li key={key} className="error-item">
+                        {errors[key]?.message}
+                    </li>
+                ))}
+            </ul>
             <form 
                 className="add--form"
                 onSubmit={handleSubmit(onSubmit)}

@@ -1,9 +1,14 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { updateVan } from "../../../../api"
 
 function EditForm(props) {
+    const navigate = useNavigate();
+
     const {
         register,
         handleSubmit,
@@ -18,7 +23,6 @@ function EditForm(props) {
         }
     })
 
-    const [error, setError] = useState(null);
     const [isDirty, setIsDirty ] = useState(false)
 
     function handleFieldChange(name, value) {
@@ -37,24 +41,26 @@ function EditForm(props) {
                 console.log("Van successfully updated", message);
 
                 props.handleClose()
-
-                // Reload the page after a successful update
-                window.location.reload()
+                toast.success("Update successful! Your van details have been successfully updated.")
+                // Reload the page after a successful insertion
+                navigate(window.location.pathname);
             } else {
-                setError(`Van updated failed: ${message}`);
+                console.error(`Van updated failed: ${message}`);
             }
         } catch (err) {
-            setError(err.message)
+            toast.error(err.message)
         }
     }
 
     return (
         <div className="edit-form--container">
-            { error && <><h4 className="red">{ error }</h4><br /></>}
-            {Object.keys(errors).map((key) => (
-                <h4 key={key} className="red">{errors[key]?.message}</h4>
-            ))}
-            {errors && Object.keys(errors).length > 0 && <br />}
+            <ul className="error-list">
+                {Object.keys(errors).map((key) => (
+                    <li key={key} className="error-item">
+                        {errors[key]?.message}
+                    </li>
+                ))}
+            </ul>
             <form 
                 className="edit--form"
                 onSubmit={handleSubmit(onSubmit)}

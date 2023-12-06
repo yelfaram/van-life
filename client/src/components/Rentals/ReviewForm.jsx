@@ -2,12 +2,12 @@ import { useState } from "react"
 import { useForm } from "react-hook-form";
 import { Rating } from '@mui/material';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { postUserReview } from "../../../api"
 
 
 function ReviewForm(props) {
-    const [error, setError] = useState(null);
-
     // react-hook-form
     const {
         register,
@@ -27,17 +27,17 @@ function ReviewForm(props) {
                 console.log("postUserReview()", message);
 
                 props.handleClose()
+                toast.success("Thank you! Your review has been successfully submitted.")
             } else {
                 console.error("postUserReview() error", message);
             }
         } catch (err) {
-            setError(err.message)
+            toast.error(err.message)
         }
     }
 
     return (
         <div className="review-form--container">
-            { error && <><br /><h4 className="red">{ error }</h4></>}
             <form
                 className="review--form"
                 onSubmit={handleSubmit(onSubmit)}

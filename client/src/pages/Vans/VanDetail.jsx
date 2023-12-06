@@ -5,6 +5,8 @@ import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/translucent.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Loading from "../../components/Loading"
 import { useAuth } from "../../hooks/AuthContext"
 import { rentVan } from "../../../api"
@@ -38,6 +40,7 @@ function VanDetail() {
             
             if (success) {
                 console.log("handleRentVan()", message);
+                toast.success("Congratulations! You have successfully rented the van. Enjoy your journey!")
                 navigate("/rentals")
             } else {
                 console.error("handleRentVan() error", message);

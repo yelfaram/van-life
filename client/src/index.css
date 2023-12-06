@@ -78,6 +78,59 @@ img {
   justify-content: center;
 }
 
+/* FORM ERRORS */
+.login--errors {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.message {
+  color: #1a73e8; /* Blue color for info message */
+  font-weight: bold;
+  margin-bottom: 15px;
+  border-left: 3px solid #1a73e8;
+  padding-left: 8px;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.message,
+.error-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.error-list {
+  list-style-type: none;
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+.error-item {
+  margin-bottom: 6px;
+  border-left: 3px solid red;
+  padding-left: 8px;
+  font-style: italic;
+  height: 100%;
+  font-size: 0.9rem;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+.error-item {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
 /* NAVBAR */
 .nav--logo {
   margin-right: auto;
@@ -297,7 +350,6 @@ footer {
   flex-direction: column;
   width: 100%;
   max-width: 700px;
-  margin-top: 50px;
 }
 
 .red {
@@ -421,7 +473,6 @@ footer {
   flex-direction: column;
   width: 100%;
   max-width: 700px;
-  margin-top: 50px;
 }
 
 .register--form input {
