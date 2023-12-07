@@ -19,7 +19,7 @@ function EditForm(props) {
             type: props.type,
             price: props.price,
             description: props.description,
-            imageURL: props.image_url,
+            imageData: props.image_url,
         }
     })
 
@@ -31,15 +31,14 @@ function EditForm(props) {
     }
 
     async function onSubmit(data) {
-        console.log(data)
-        const { name, type, price, description, imageURL } = data
+        const imageURL = props.image_url
+        const { name, type, price, description, imageData } = data
 
         try {
-            const { success, message } = await updateVan(props.van_id, name, type, price, description, imageURL)
+            const imageFile = imageData[0]
+            const { success, message } = await updateVan(props.van_id, name, type, price, description, imageFile, imageURL)
 
             if (success) {
-                console.log("Van successfully updated", message);
-
                 props.handleClose()
                 toast.success("Update successful! Your van details have been successfully updated.")
                 // Reload the page after a successful insertion
@@ -72,6 +71,7 @@ function EditForm(props) {
                         onChange: (e) => {handleFieldChange("name", e.target.value)} 
                     })}
                     placeholder="Name"
+                    className="edit--form-input"
                 />
                 <select 
                     {...register("type", { 
@@ -96,6 +96,7 @@ function EditForm(props) {
                     })}
                     min={0}
                     placeholder="Rate per day"
+                    className="edit--form-input"
                 />
                 <textarea
                     {...register("description", { 
@@ -106,16 +107,11 @@ function EditForm(props) {
                     rows={4} 
                 />
                 <input 
-                    type="text"
-                    {...register("imageURL", { 
-                        required: "Please provide an image url of your van",
-                        pattern: {
-                            value: /^(ftp|http|https):\/\/[^ "]+$/,
-                            message: "Please provide a valid image URL"
-                        },
-                        onChange: (e) => {handleFieldChange("imageURL", e.target.value)}
+                    type="file"
+                    {...register('imageData', { 
+                        onChange: (e) => {handleFieldChange("imageData", e.target.value)}
                     })}
-                    placeholder="Paste image URL"
+                    accept="image/*"
                 />
                 <button 
                     type="submit" 

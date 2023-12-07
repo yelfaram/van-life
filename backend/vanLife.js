@@ -1,45 +1,5 @@
 import { hash, compare } from 'bcrypt';
-import connection from "./db/connection.js";
-
-const handleQueryResults = (resolve, reject, error, results, key, operation, fetchOne) => {
-    if (error) {
-        reject(error);
-    } else {
-        if (operation === "insert" || operation === "update" || operation === "delete") {
-            // For inserts, updates and deletes, resolve with a success message
-            const response = `${operation} successful for ${key}`
-            resolve(response);
-        } else {
-            // For selects, resolve with the data
-            const data = results.rows;
-
-            if (data && data.length > 0) {
-                const response = { [key]: fetchOne ? data[0] : data };
-                resolve(response);
-            } else {
-                const response = { [key]: null };
-                resolve(response);
-            }
-        }
-    }
-};
-
-const executeQuery = async (query, values, key, operation = "select", fetchOne = false) => {
-    const client = await connection.connect();
-    try {
-        const results = await client.query(query, values);
-        return new Promise((resolve, reject) => {
-            handleQueryResults(resolve, reject, null, results, key, operation, fetchOne);
-        });
-    } catch (err) {
-        console.error(err);
-        return new Promise((resolve, reject) => {
-            handleQueryResults(resolve, reject, err, null, key, operation, fetchOne);
-        });
-    } finally {
-        client.release();
-    }
-};
+import { executeQuery } from "./utils/helpers.js"
 
 export const authenticateUser = async (email, password, userType) => {
     const query = userType === "renter"
@@ -142,6 +102,17 @@ export const getVanByName = async (name) => {
     const query = "SELECT * FROM van WHERE name = $1"
     try {
         const result = await executeQuery(query, [name], "van", "select", true)
+        return result
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+}
+
+export const getVanByNameExcludingId = async (vanId, name) => {
+    const query = "SELECT * FROM van WHERE van_id != $1 AND name = $2"
+    try {
+        const result = await executeQuery(query, [vanId, name], "van", "select", true)
         return result
     } catch (err) {
         console.error(err);

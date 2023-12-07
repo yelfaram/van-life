@@ -20,8 +20,6 @@ function HostVan(props) {
             const { success, message } = await deleteVan(vanId)
 
             if (success) {
-                console.log("handleDeleteVan()", message);
-
                 toast.success("Van successfully deleted.")
                 // Reload the page after a successful insertion
                 navigate(window.location.pathname);

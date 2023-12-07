@@ -24,8 +24,6 @@ function ReviewForm(props) {
             const { success, message } = await postUserReview(props.email, props.vanId, rating, description)
 
             if (success) {
-                console.log("postUserReview()", message);
-
                 props.handleClose()
                 toast.success("Thank you! Your review has been successfully submitted.")
             } else {

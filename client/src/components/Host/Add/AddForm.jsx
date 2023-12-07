@@ -12,18 +12,20 @@ function AddForm(props) {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm()
-
+    } = useForm({
+        defaultValues: {
+            type: ""
+        }
+    })
 
     async function onSubmit(data) {
-        const { name, type, price, description, imageURL } = data
+        const { name, type, price, description, imageData } = data
 
         try {
-            const { success, message } = await addVan(name, type, price, description, imageURL)
+            const imageFile = imageData[0]
+            const { success, message } = await addVan(name, type, price, description, imageFile)
 
             if (success) {
-                console.log("Van successfully inserted", message);
-
                 props.handleClose()
                 toast.success("Great news! Your van has been successfully added.")
                 // Reload the page after a successful insertion
@@ -34,7 +36,6 @@ function AddForm(props) {
         } catch (err) {
             toast.error(err.message)
         }
-    
     }
 
     return (
@@ -54,6 +55,7 @@ function AddForm(props) {
                     type="text"
                     {...register("name", { required: "Please provide a name for your van" })}
                     placeholder="Name"
+                    className="add--form-input"
                 />
                 <select {...register("type", { required: "Please select the type of van" })}>
                     <option value="" disabled hidden>Select Van Type</option>
@@ -72,22 +74,19 @@ function AddForm(props) {
                     })}
                     min={0}
                     placeholder="Rate per day"
+                    className="add--form-input"
                 />
                 <textarea
                     {...register("description", { required: "Please provide a description of your van" })}
                     placeholder="Include a van description"
                     rows={4} 
                 />
-                <input 
-                    type="text"
-                    {...register("imageURL", { 
-                        required: "Please provide an image url of your van",
-                        pattern: {
-                            value: /^(ftp|http|https):\/\/[^ "]+$/,
-                            message: "Please provide a valid image URL"
-                        }
+                <input
+                    type="file"
+                    {...register('imageData', { 
+                        required: 'Please provide an image file.',
                     })}
-                    placeholder="Paste image URL"
+                    accept="image/*"
                 />
                 <button type="submit">Add</button>
             </form>

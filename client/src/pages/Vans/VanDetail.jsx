@@ -39,7 +39,6 @@ function VanDetail() {
             const {success, message} = await rentVan(vanId, totalCost, startDate, endDate);
             
             if (success) {
-                console.log("handleRentVan()", message);
                 toast.success("Congratulations! You have successfully rented the van. Enjoy your journey!")
                 navigate("/rentals")
             } else {

@@ -1,13 +1,19 @@
 import express from "express";
 import session from 'express-session';
 import cors from "cors";
+import multer from "multer";
+import path from 'path';
 import 'dotenv/config';
-import connection from "./db/connection.js";
 import * as vanLife from "./vanLife.js"
+import cloudinary from "./utils/cloudinary.js"
+import { getPublicId, bufferToDataUri } from "./utils/helpers.js"
 
 // create an express application
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// setup for image upload
+const upload = multer();
 
 // Cross-origin resource sharing (CORS) is a mechanism that allows restricted resources on a web page to be requested from another domain outside the domain from which the first resource was served.
 app.use(
@@ -191,9 +197,9 @@ app.get('/host/vans', async (req, res) => {
   }
 })
 
-app.post('/host/vans', async (req, res) => {
+app.post('/host/vans', upload.single('imageFile'), async (req, res) => {
   const hostId = req.session.hostId
-  const { name, type, price, description, imageURL } = req.body
+  const { name, type, price, description } = req.body
 
   try {
     const result = await vanLife.getVanByName(name)
@@ -202,6 +208,16 @@ app.post('/host/vans', async (req, res) => {
       res.status(409).json({ success: false, message: 'Van already exists with that name'})
       return;
     }
+    
+    const fileExtension = path.extname(req.file.originalname).toString();
+    const dataUri = bufferToDataUri(req.file.buffer, req.file.mimetype);
+
+    // Upload the image to Cloudinary
+    const cloudinaryResponse = await cloudinary.uploader.upload(dataUri, { 
+      folder: "vans",
+      format: fileExtension.slice(1)
+    });
+    const imageURL = cloudinaryResponse.secure_url;
 
     const msg = await vanLife.insertVan(hostId, name, type, price, description, imageURL)
     res.json({ success: true, message: msg })
@@ -239,19 +255,43 @@ app.get('/host/vans/:id', async (req, res) => {
   }
 })
 
-app.put('/host/vans/:id', async (req, res) => {
+app.put('/host/vans/:id', upload.single('imageFile'), async (req, res) => {
   const vanId = req.params.id
   const { name, type, price, description, imageURL } = req.body
-
+  
   try {
-    const result = await vanLife.getVanByName(name)
+    const result = await vanLife.getVanByNameExcludingId(vanId, name)
     const van = result.van;
     if (van) {
       res.status(409).json({ success: false, message: 'Van already exists with that name'})
       return;
     }
 
-    const msg = await vanLife.updateVan(vanId, name, type, price, description, imageURL)
+    let newImageURL = imageURL // default to old image url
+    let oldImagePublicId;
+    
+    if (req.file) {
+      // If a new file is uploaded, upload to Cloudinary and get the new URL
+      const fileExtension = path.extname(req.file.originalname).toString();
+      const dataUri = bufferToDataUri(req.file.buffer, req.file.mimetype);
+
+      const cloudinaryResponse = await cloudinary.uploader.upload(dataUri, { 
+        folder: "vans",
+        format: fileExtension.slice(1)
+      });
+      newImageURL = cloudinaryResponse.secure_url;
+
+      // get id of old image since new file is uploaded
+      oldImagePublicId = getPublicId(imageURL);
+    }
+
+    const msg = await vanLife.updateVan(vanId, name, type, price, description, newImageURL)
+
+    // delete old image from cloudinary
+    if (oldImagePublicId) {
+      await cloudinary.uploader.destroy(`vans/${oldImagePublicId}`)
+    }
+
     res.json({ success: true, message: msg })
   } catch (err) {
     console.error(err);
@@ -263,7 +303,13 @@ app.delete('/host/vans/:id', async (req, res) => {
   const vanId = req.params.id
 
   try {
+    // delete van image from cloudinary
+    const result = await vanLife.getVanById(vanId);
+    const van = result.van;
+    await cloudinary.uploader.destroy(`vans/${getPublicId(van.image_url)}`)
+    
     const msg = await vanLife.deleteVan(vanId)
+
     res.json({ success: true, message: msg })
   } catch (err) {
     console.error(err);

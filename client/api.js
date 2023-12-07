@@ -198,14 +198,18 @@ export async function postUserReview(email, vanId, rating, description) {
     return data
 }
 
-export async function addVan(name, type, price, description, imageURL) {
+export async function addVan(name, type, price, description, imageFile) {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('type', type);
+    formData.append('price', price);
+    formData.append('description', description);
+    formData.append('imageFile', imageFile);
+
     const res = await fetch(`http://localhost:3000/host/vans`, 
         {
             method: 'POST',
-            body: JSON.stringify({ name, type, price, description, imageURL }),
-            headers: {
-                "Content-Type": "application/json",
-            },
+            body: formData,
             credentials: "include",
         }
     )
@@ -220,14 +224,20 @@ export async function addVan(name, type, price, description, imageURL) {
     return data
 }
 
-export async function updateVan(id, name, type, price, description, imageURL) {
+export async function updateVan(id, name, type, price, description, imageFile, imageURL) {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('type', type);
+    formData.append('price', price);
+    formData.append('description', description);
+    formData.append('imageFile', imageFile);
+    formData.append('imageURL', imageURL);
+
     const res = await fetch(`http://localhost:3000/host/vans/${id}`, 
         {
             method: 'PUT',
-            body: JSON.stringify({ name, type, price, description, imageURL }),
-            headers: {
-                "Content-Type": "application/json",
-            },
+            body: formData,
+            credentials: "include",
         }
     )
     const data = await res.json();
@@ -248,6 +258,7 @@ export async function deleteVan(id) {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include",
         }
     )
     const data = await res.json();

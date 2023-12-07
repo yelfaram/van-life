@@ -1073,6 +1073,7 @@ footer {
   height: 125px;
   width: 125px;
   border-radius: 5px;
+  object-fit: cover;
 }
 
 /* HOST DASHBOARD */
@@ -1547,9 +1548,9 @@ footer {
 }
 
 .add--form select,
-.add--form input,
+.add--form .add--form-input,
 .edit--form select,
-.edit--form input {
+.edit--form .edit--form-input {
   border: 1px solid rgba(209, 213, 219);
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
   height: 45px;
@@ -1574,27 +1575,31 @@ footer {
   outline: none;
 }
 
-.add--form input:first-of-type,
-.edit--form input:first-of-type {
+.add--form .add--form-input:first-of-type,
+.edit--form .edit--form-input:first-of-type {
   border-radius: 6px 6px 0 0;
   border-bottom: none;
 }
 
-.add--form input:nth-of-type(2),
-.edit--form input:nth-of-type(2) {
+.add--form .add--form-input:nth-of-type(2),
+.edit--form .edit--form-input:nth-of-type(2) {
   border-bottom: none;
 }
 
-.add--form input:last-of-type,
-.edit--form input:last-of-type {
-  border-radius: 0 0 6px 6px;
-  border-top: none;
+.add--form input[type=file],
+.edit--form input[type=file] {
+  margin-top: 10px;
+  padding: 15px;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
 }
 
 .add--form textarea,
 .edit--form textarea {
   border: 1px solid rgba(209, 213, 219);
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 0 0 6px 6px;
   font-family: "Inter", sans-serif;
   font-size: 1rem;
   font-weight: 400;
