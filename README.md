@@ -1,5 +1,5 @@
 # Scrimba - Travel Van Rental
-This is my solution to the [VanLife project on Scrimba](https://scrimba.com/learn/reactrouter6)
+This is my solution to the [VanLife project on Scrimba](https://scrimba.com/learn/reactrouter6) where I took a full-stack approach to make it a fully functioning app.
 
 ## Overview
 An app for renting decked-out travel vans for your next road trip adventure
